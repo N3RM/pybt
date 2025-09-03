@@ -30,7 +30,7 @@ class BigTimeAPI:
 
     ### Picklists ###
 
-    def get_picklist_projects(self, staff_sid = None) -> Picklist: #checked
+    def get_picklist_projects(self, staff_sid = None) -> Picklist:
         result = self._rest_adapter.get(
             endpoint="picklist/projects/",
             params={"staffsid": staff_sid},
@@ -38,24 +38,24 @@ class BigTimeAPI:
         picklist = Picklist([PicklistProject(**project) for project in result.data])
         return picklist
 
-    def get_picklist_clients(self) -> Picklist: #checked
+    def get_picklist_clients(self) -> Picklist:
         result = self._rest_adapter.get(endpoint="picklist/clients/")
         picklist = Picklist([PicklistIdName(**client) for client in result.data])
         return picklist
 
-    def get_picklist_staff(self) -> Picklist: #checked
+    def get_picklist_staff(self) -> Picklist:
         result = self._rest_adapter.get(endpoint="picklist/staff/")
         picklist = Picklist([PicklistIdName(**staff) for staff in result.data])
         return picklist
 
-    def get_picklist_all_tasks_by_project(self, project_sid: str) -> Picklist: #checked
+    def get_picklist_all_tasks_by_project(self, project_sid: str) -> Picklist:
         result = self._rest_adapter.get(
             endpoint=f"picklist/AllTasksByProject/{project_sid}/"
         )
         picklist = Picklist([PicklistIdName(**task) for task in result.data])
         return picklist
 
-    def get_lookup_project_team_roles(self) -> Picklist: #checked
+    def get_lookup_project_team_roles(self) -> Picklist:
         result = self._rest_adapter.get(
             endpoint="picklist/FieldValues/LookupProjectTeamRoles/"
         )
@@ -84,7 +84,7 @@ class BigTimeAPI:
     def get_month_timesheet(
         self,
         staff_sid: str,
-    ) -> Timesheet:  #checked
+    ) -> Timesheet:
         return self.get_staff_time_sheet(
             staff_sid,
             self._format_bigtime_date(self._get_month_start_date()),

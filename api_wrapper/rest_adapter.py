@@ -17,9 +17,6 @@ class RestAdapter:
         ver: str = "v2",
         ssl_verify: bool = False,
     ):
-        """
-        
-        """
         self.url = "https://{}/{}/".format(hostname, ver)
         self._api_key = api_key
         self._firm = firm
