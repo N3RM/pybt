@@ -1,2 +1,11 @@
 # pybt
-pybt is a repository for an unofficial BigTime API Wrapper written in Python
+A BigTime API wrapper for Python
+
+## Docs
+[See documentation here](docs/)
+
+## Contributing
+If you find any bugs and/or errors, please [submit an issue](https://github.com/N3RM/pybt/issues) or fork the repository and submit a pull request with your updates.
+
+## Examples
+Coming soon

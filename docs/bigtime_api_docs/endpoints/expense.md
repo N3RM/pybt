@@ -1,0 +1,11 @@
+# Expense
+- [ ] **GET** `/Reports`
+- [ ] **GET** `/Report`
+- [ ] **POST** `/ReportByFilter`
+- [ ] **GET** `/Receipt`
+- [ ] **POST** `/Receipt`
+- [ ] **DEL** `/Receipt`
+- [ ] **POST** `/Detail`
+- [ ] **DEL** `/Detail`
+- [ ] **POST** `/Submit`
+- [ ] **GET** `/TaxRates`

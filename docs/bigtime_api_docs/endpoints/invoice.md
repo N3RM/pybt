@@ -1,0 +1,13 @@
+# Invoice
+- [ ] **GET** `/History`
+- [ ] **GET** `/Drafts`
+- [ ] **GET** `/List`
+- [ ] **GET** `/Detail`
+- [ ] **POST** `/Create`
+- [ ] **POST** `/Detail`
+- [ ] **GET** `/PDF`
+- [ ] **GET** `/Timesheet`
+- [ ] **GET** `/Expense`
+- [ ] **GET** `/WipOverview`
+- [ ] **GET** `/Wip`
+- [ ] **GET** `/CalculatorTypes`
