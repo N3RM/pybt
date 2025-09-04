@@ -1,16 +1,16 @@
 # PicklistController
-- [ ] **GET** `/Projects`
-- [ ] **GET** `/Clients`
-- [ ] **GET** `/Staff`
+- [X] **GET** `/Projects`
+- [X] **GET** `/Clients`
+- [X] **GET** `/Staff`
 - [ ] **GET** `/LaborCodes`
 - [ ] **GET** `/ExpenseCodes`
 - [ ] **POST** `/ExpenseCode`
-- [ ] **GET** `/AllTasksByProject`
+- [X] **GET** `/AllTasksByProject`
 - [ ] **GET** `/EstimatesByProjects`
 - [ ] **GET** `/TasksByProject`
 - [ ] **GET** `/QBClasses`
 - [ ] **GET** `/PayrollItems`
-- [ ] **GET** `/FieldValues`
+- [-] **GET** `/FieldValues`
 - [ ] **GET** `/QBAccountList`
 - [ ] **GET** `/QBList`
 - [ ] **GET** `/IAList`

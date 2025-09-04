@@ -3,24 +3,24 @@
 - [ ] **GET** `/Template`
 - [ ] **POST** `/Template`
 - [ ] **DEL** `/Template`
-- [ ] **GET** `/Contacts`
+- [X] **GET** `/Contacts`
 - [ ] **GET** `/Contact`
-- [ ] **POST** `/Contact`
-- [ ] **DEL** `/Contact`
+- [X] **POST** `/Contact`
+- [X] **DEL** `/Contact`
 - [ ] **GET** `/Index`
-- [ ] **GET** `/Detail`
-- [ ] **POST** `/Detail`
+- [X] **GET** `/Detail`
+- [X] **POST** `/Detail`
 - [ ] **DEL** `/Detail`
-- [ ] **GET** `/Team`
-- [ ] **POST** `/Team`
+- [X] **GET** `/Team`
+- [X] **POST** `/Team`
 - [ ] **GET** `/StaffTeams`
 - [ ] **POST** `/StaffTeams`
-- [ ] **GET** `/CustomFields`
+- [X] **GET** `/CustomFields`
 - [ ] **POST** `/CustomFieldsByName`
 - [ ] **POST** `/CustomFields`
-- [ ] **GET** `/Rates`
+- [X] **GET** `/Rates`
 - [ ] **GET** `/Rate`
-- [ ] **POST** `/Rate`
+- [X] **POST** `/Rate`
 - [ ] **DEL** `/Rate`
 - [ ] **GET** `/Activity`
 - [ ] **POST** `/Activity`

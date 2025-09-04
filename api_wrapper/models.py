@@ -593,3 +593,6 @@ class StaffTimesheet(Timesheet):
     ):
         super().__init__(start_date, end_date, timesheet)
         self.staffSID = staffSID
+
+
+class Ticket: ...

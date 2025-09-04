@@ -17,13 +17,13 @@ class RestAdapter:
         ver: str = "v2",
         ssl_verify: bool = False,
     ):
-        self.url = "https://{}/{}/".format(hostname, ver)
+        self.url = f"https://{hostname}/{ver}/"
         self._api_key = api_key
         self._firm = firm
         self._ssl_verify = ssl_verify
 
     def _do(
-        self, http_method: str, endpoint: str, ep_params= None, data=None
+        self, http_method: str, endpoint: str, ep_params = None, data = None
     ) -> Result:
         full_url = self.url + endpoint
         headers = {"X-auth-ApiToken": self._api_key, "X-auth-realm": self._firm}
@@ -46,7 +46,7 @@ class RestAdapter:
             return Result(response.status_code, message=response.reason, data=data_out)
         raise BigTimeAPIException(f"{response.status_code}: {response.reason}")
 
-    def get(self, endpoint: str, params = None) -> Result:
+    def get(self, endpoint: str, params = None, data = None) -> Result:
         return self._do(http_method="GET", endpoint=endpoint, ep_params=params)
 
     def post(self, endpoint: str, params = None, data = None) -> Result:

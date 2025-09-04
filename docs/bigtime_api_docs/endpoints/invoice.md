@@ -1,9 +1,9 @@
 # Invoice
-- [ ] **GET** `/History`
-- [ ] **GET** `/Drafts`
+- [X] **GET** `/History`
+- [X] **GET** `/Drafts`
 - [ ] **GET** `/List`
-- [ ] **GET** `/Detail`
-- [ ] **POST** `/Create`
+- [X] **GET** `/Detail`
+- [X] **POST** `/Create`
 - [ ] **POST** `/Detail`
 - [ ] **GET** `/PDF`
 - [ ] **GET** `/Timesheet`

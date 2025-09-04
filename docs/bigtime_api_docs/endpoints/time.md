@@ -4,8 +4,8 @@
 - [ ] **GET** `/AuditLogDetailsByProject`
 - [ ] **GET** `/AuditLogDetails`
 - [ ] **GET** `/AuditLogDetailsBySid`
-- [ ] **GET** `/Sheet`
-- [ ] **GET** `/ByProject`
+- [X] **GET** `/Sheet`
+- [X] **GET** `/ByProject`
 - [ ] **GET** `/PeriodContainingDate`
 - [ ] **GET** `/TotalByDay`
 - [ ] **GET** `/Index`

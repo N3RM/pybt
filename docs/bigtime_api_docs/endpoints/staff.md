@@ -1,6 +1,6 @@
 # Staff
-- [ ] **GET** `/Index`
-- [ ] **GET** `/Detail`
+- [X] **GET** `/Index`
+- [X] **GET** `/Detail`
 - [ ] **POST** `/Detail`
 - [ ] **POST** `/Add`
 - [ ] **GET** `/UDFlist`

@@ -1,5 +1,5 @@
 # Client
-- [ ] **GET** `/Index`
-- [ ] **GET** `/Detail`
+- [X] **GET** `/Index`
+- [X] **GET** `/Detail`
 - [ ] **POST** `/Detail`
-- [ ] **DEL** `/Detail`
+- [X] **DEL** `/Detail`

@@ -1,5 +1,5 @@
 # Expense
-- [ ] **GET** `/Reports`
+- [X] **GET** `/Reports`
 - [ ] **GET** `/Report`
 - [ ] **POST** `/ReportByFilter`
 - [ ] **GET** `/Receipt`

@@ -1,12 +1,12 @@
 # Task
 - [ ] **GET** `/List`
 - [ ] **GET** `/ListByDate`
-- [ ] **GET** `/ListByProject`
-- [ ] **GET** `/BudgetStatusByProject`
+- [X] **GET** `/ListByProject`
+- [X] **GET** `/BudgetStatusByProject`
 - [ ] **GET** `/ListByStaffer`
 - [ ] **GET** `/TransactionSummary`
-- [ ] **GET** `/Detail`
-- [ ] **POST** `/Detail`
+- [X] **GET** `/Detail`
+- [X] **POST** `/Detail`
 - [ ] **POST** `/CreateTaskAndProject`
 - [ ] **DEL** `/Detail`
 - [ ] **POST** `/Merge`

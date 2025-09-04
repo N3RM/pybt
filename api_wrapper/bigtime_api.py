@@ -1,5 +1,6 @@
 from api_wrapper.models import Picklist, Result, PicklistIdName, PicklistProject, Timesheet, StaffTimesheet, Time, Project, Contact, ProjectTeamMember, Task
 from api_wrapper.rest_adapter import RestAdapter
+from api_wrapper.endpoints import PicklistEndPoint
 from datetime import date
 import calendar
 
@@ -14,6 +15,42 @@ class BigTimeAPI:
         ssl_verify: bool = False,
     ) -> None:
         self._rest_adapter = RestAdapter(hostname, api_key, firm, ver, ssl_verify)
+        self.get = self._Get(self)
+        self.create = self._Create(self)
+        self.update = self._Update(self)
+        self.delete = self._Delete(self)
+
+    class _Get:
+        def __init__(self, api):
+            self.call: callable = api._rest_adapter.get
+            self.picklist = self._Picklist(self.call)
+            
+        class _Picklist(PicklistEndPoint):
+            def __init__(self, method):
+                self.endpoint = "Picklist"
+                super().__init__(method)
+
+            def projects(self, staff_sid : str = None):
+                """
+                Get a list of projects that the current user has permissions to see.
+                BigTime API docs say that you can include staffsid to see only projects that staffer is on,
+                but testing shows that it only returns a list of all projects that the current user can see
+                regardless of if the staffsid is included or not.
+                """
+                result = self._projects(endpoint=f"{self.endpoint}/projects/", params={"staffsid": staff_sid} if staff_sid else None, data=None)
+                return Picklist([PicklistProject(**project) for project in result])
+    
+    class _Create:
+        def __init__(self, api):
+            self.call = api._rest_adapter.post
+    
+    class _Update:
+        def __init__(self, api):
+            self.call = api._rest_adapter.post
+    
+    class _Delete:
+        def __init__(self, api):
+            self.call = api._rest_adapter.delete
 
     ### Helper ###
 
@@ -27,16 +64,25 @@ class BigTimeAPI:
 
     def _format_bigtime_date(self, dt: date) -> str:
         return dt.strftime("%Y-%m-%d")
+    
+    class Async:
+        def __init__(self, api):
+            self.api = api
+            self.endpoint = "Async"
 
-    ### Picklists ###
-
-    def get_picklist_projects(self, staff_sid = None) -> Picklist:
-        result = self._rest_adapter.get(
-            endpoint="picklist/projects/",
-            params={"staffsid": staff_sid},
-        )
-        picklist = Picklist([PicklistProject(**project) for project in result.data])
-        return picklist
+        
+        
+        def submit_time_sheet(): ...
+        def submit_time_sheet_signed(): ...
+        def resubmit_expense_report(): ...
+        def resubmit_time(): ...
+        def resubmit_all_time_by_staffer(): ...
+        def submit_expenses(): ...
+        def post_timesheet(): ...
+        def post_expense_report(): ...
+        def post_invoice(): ...
+        def import_qb_time(): ...
+        def import_qb_invoices(): ...
 
     def get_picklist_clients(self) -> Picklist:
         result = self._rest_adapter.get(endpoint="picklist/clients/")
@@ -81,7 +127,7 @@ class BigTimeAPI:
         staff_timesheet.timesheet = timesheet_data
         return staff_timesheet
 
-    def get_month_timesheet(
+    def get_current_month_timesheet(
         self,
         staff_sid: str,
     ) -> Timesheet:

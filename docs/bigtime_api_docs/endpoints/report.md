@@ -1,4 +1,4 @@
 # Report
 - [ ] **GET** `/Detail`
-- [ ] **GET** `/Data`
-- [ ] **POST** `/Data`
+- [X] **GET** `/Data`
+- [X] **POST** `/Data`
