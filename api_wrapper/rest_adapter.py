@@ -46,7 +46,7 @@ class RestAdapter:
             return Result(response.status_code, message=response.reason, data=data_out)
         raise BigTimeAPIException(f"{response.status_code}: {response.reason}")
 
-    def get(self, endpoint: str, params = None, data = None) -> Result:
+    def get(self, endpoint: str, params = None) -> Result:
         return self._do(http_method="GET", endpoint=endpoint, ep_params=params)
 
     def post(self, endpoint: str, params = None, data = None) -> Result:

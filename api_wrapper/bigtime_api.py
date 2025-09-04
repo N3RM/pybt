@@ -22,13 +22,13 @@ class BigTimeAPI:
 
     class _Get:
         def __init__(self, api):
-            self.call: callable = api._rest_adapter.get
-            self.picklist = self._Picklist(self.call)
+            self._method: callable = api._rest_adapter.get
+            self.picklist = self._Picklist(self._method)
             
-        class _Picklist(PicklistEndPoint):
+        class _Picklist:
             def __init__(self, method):
-                self.endpoint = "Picklist"
-                super().__init__(method)
+                self._endpoint = "Picklist"
+                self._method = method
 
             def projects(self, staff_sid : str = None):
                 """
@@ -37,12 +37,91 @@ class BigTimeAPI:
                 but testing shows that it only returns a list of all projects that the current user can see
                 regardless of if the staffsid is included or not.
                 """
-                result = self._projects(endpoint=f"{self.endpoint}/projects/", params={"staffsid": staff_sid} if staff_sid else None, data=None)
+                params = None
+                if staff_sid:
+                    params["staffsid"] = staff_sid
+                result = self._method(endpoint=f"{self._endpoint}/Projects/", params=params)
                 return Picklist([PicklistProject(**project) for project in result])
+            
+            def clients(self):
+                result = self._clients(endpoint=f"{self._endpoint}/Clients/", params=None)
+                return result # modify to put data into model class before returning
+            
+            def staff(self, show_inactive : bool = False):
+                params = None
+                if show_inactive:
+                    params["showinactive"] = "true"
+                result = self._method(endpoint=f"{self._endpoint}/Staff/", params=params)
+                return result # modify to put data into model class before returning
+            
+            def labor_codes(self, staff_sid : str = None):
+                params = None
+                if staff_sid:
+                    params["staffsid"] = staff_sid
+                result = self._method(endpoint=f"{self._endpoint}/LaborCodes/", params=params)
+                return result # modify to put data into model class before returning
+            
+            def labor_codes_by_project(self, project_sid : str):
+                result = self._method(endpoint=f"{self._endpoint}/LaborCodesByProject/{project_sid}", params=None)
+                return result # modify to put data into model class before returning
+            
+            def all_tasks_by_project(self, project_sid : str, budget_type : str = None, filter_id : str = None, show_inactive : bool = False):
+                params = None
+                if budget_type:
+                    params["budgettype"] = budget_type
+                if show_inactive:
+                    params["showinactive"] = "true"
+
+                result = self._method(endpoint=f"{self._endpoint}/AllTasksByProject/{project_sid}", params=params)
+                return result # modify to put data into model class before returning
+            
+            def estimates_by_project(self, project_sid : str, staff_sid : str = None, budget_type : str = None, show_inactive : bool = False):
+                params = None
+                if staff_sid:
+                    params["staffsid"] = staff_sid
+                if budget_type:
+                    params["budgettype"] = budget_type
+                if show_inactive:
+                    params["showinactive"] = "true"
+
+                result = self._method(endpoint=f"{self._endpoint}/EstimatesByProjects/{project_sid}", params=params)
+                return result # modify to put data into model class before returning
+            
+            def qb_classes(self):
+                result = self._method(endpoint=f"{self._endpoint}/QBClasses/", params=None)
+                return result # modify to put data into model class before returning
+            
+            def payroll_items(self, staff_sid : str):
+                result = self._method(endpoint=f"{self._endpoint}/PayrollItems/", params={"staffsid": staff_sid})
+                return result # modify to put data into model class before returning
+            
+            def field_values(self, sid : str, show_inactive : bool = False):
+                params = {}
+                params["sid"] = sid
+                if show_inactive:
+                    params = {"showinactive": "true"}
+                result = self._method(endpoint=f"{self._endpoint}/FieldValues/", params=params)
+                return result # modify to put data into model class before returning
+            
+            def credit_cards(self, staff_sid : str, show_all : bool = False):
+                params = {}
+                params["staffsid"] = staff_sid
+                if show_all:
+                    params["showall"] = "true"
+                result = self._method(endpoint=f"{self._endpoint}/CreditCards/", params=params)
+                return result # modify to put data into model class before returning
+            
+            def time_zones(self):
+                result = self._method(endpoint=f"{self._endpoint}/Timezones/", params=None)
+                return result # modify to put data into model class before returning
     
     class _Create:
         def __init__(self, api):
             self.call = api._rest_adapter.post
+
+        def expense_code(self):
+                result = self._method(endpoint=f"{self._endpoint}/expensecode/", params={"": } if  else None)
+                return result # modify to put data into model class before returning
     
     class _Update:
         def __init__(self, api):
@@ -68,7 +147,7 @@ class BigTimeAPI:
     class Async:
         def __init__(self, api):
             self.api = api
-            self.endpoint = "Async"
+            self._endpoint = "Async"
 
         
         
