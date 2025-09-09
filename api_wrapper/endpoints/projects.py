@@ -1,4 +1,4 @@
-from api_wrapper.models import Result, Project
+from api_wrapper.models import Result, Project, Contact
 
 class _Project:
     def __init__(self, method):
@@ -24,13 +24,13 @@ class _Project:
             params["view"] = view
         if show_all_contacts:
             params["showallcontacts"] = "true"
-        result: Result = self._method(endpoint=f"{self._endpoint}/Detail/{project_sid}" if project_sid else f"{self._endpoint}/Detail/", params=params)
+        result: Result = self._method(endpoint=f"{self._endpoint}/Detail/{project_sid}" if project_sid else f"{self._endpoint}/Detail", params=params)
         return Project(**result.data) if result.data else result
     
     def _contacts(self, project_sid : str = None):
         params = {}
         params["id"] = project_sid
-        result : Result = self._method(endpoint=f"{self._endpoint}/Contacts", params=params)
-        return result.data
+        result: Result = self._method(endpoint=f"{self._endpoint}/Contacts", params=params)
+        return [Contact(**contact) for contact in result.data]
     
     

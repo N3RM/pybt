@@ -36,9 +36,9 @@ class CustomField(Base):
         Value: str = None,
         **kwargs
     ):
-        self.Sid: str = Sid
-        self.Name: str = Name
-        self.Value: str = Value
+        self.id: str = Sid
+        self.name: str = Name
+        self.value: str = Value
 
 
 class Address(Base):
@@ -51,11 +51,11 @@ class Address(Base):
         Country: str = None,
         **kwargs
     ):
-        self.Address = Address
-        self.City = City
-        self.State = State
-        self.Zip = Zip
-        self.Country = Country
+        self.address = Address
+        self.city = City
+        self.state = State
+        self.zip = Zip
+        self.country = Country
 
 
 class Contact(Base):
@@ -73,14 +73,14 @@ class Contact(Base):
         **kwargs,
     ):
         self.id = id
-        self.Tag = Tag
-        self.ProjectSid = ProjectSid
-        self.ClientSid = ClientSid
-        self.FName = FName
-        self.SName = SName
-        self.CompanyNm = CompanyNm
-        self.Email = Email
-        self.Address = Address
+        self.tag = Tag
+        self.project_id = ProjectSid
+        self.client_id = ClientSid
+        self.first_name = FName
+        self.last_name = SName
+        self.company_name = CompanyNm
+        self.email = Email
+        self.address = Address
 
 
 class Client(Base):
@@ -91,9 +91,9 @@ class Client(Base):
         ClientId: str = None,
         **kwargs
     ):
-        self.SystemId = SystemId
-        self.Nm = Nm
-        self.ClientId = ClientId
+        self.project_id = SystemId # TODO Verify that this is project ID
+        self.name = Nm
+        self.id = ClientId
 
 
 class Project(Base):
@@ -125,33 +125,33 @@ class Project(Base):
         Client: Client = None,
         **kwargs,
     ):
-        self.SystemId = SystemId
-        self.Nm = Nm
-        self.ProjectCode = ProjectCode
-        self.TypeId = TypeId
-        self.StartDt = date.fromisoformat(StartDt) if StartDt else StartDt
-        self.EndDt = date.fromisoformat(EndDt) if EndDt else EndDt
-        self.StatusProd = StatusProd
-        self.StatusProd_nt = StatusProd_nt
-        self.StatusBill = StatusBill
-        self.Notes = Notes
-        self.IsAllStaff = True if IsAllStaff == "true" else False
-        self.IsNoCharge = True if IsNoCharge == "true" else False
-        self.InvoiceType = InvoiceType
-        self.InvoiceTotals = InvoiceTotals
-        self.ContractNotes = ContractNotes
-        self.InvoiceNotes = InvoiceNotes
-        self.BillingRate = BillingRate
-        self.BasicRate = float(BasicRate)
-        self.QBCustomerId = QBCustomerId
-        self.ClientId = ClientId
-        self.BillingContactId = BillingContactId
-        self.ContactList = ContactList
-        self.AddressList = AddressList
-        self.Client = Client
+        self.id = SystemId
+        self.name = Nm
+        self.project_code = ProjectCode
+        self.type_id = TypeId
+        self.start_date = date.fromisoformat(StartDt) if StartDt else StartDt
+        self.end_date = date.fromisoformat(EndDt) if EndDt else EndDt
+        self.production_status = StatusProd
+        self.production_status_id = StatusProd_nt
+        self.billing_status = StatusBill
+        self.notes = Notes
+        self.is_all_staff = True if IsAllStaff == "true" else False
+        self.is_no_charge = True if IsNoCharge == "true" else False
+        self.invoice_type = InvoiceType
+        self.invoice_totals = InvoiceTotals
+        self.contract_notes = ContractNotes
+        self.invoice_notes = InvoiceNotes
+        self.billing_rate = BillingRate
+        self.basic_rate = float(BasicRate)
+        self.qb_customer_id = QBCustomerId
+        self.client_id = ClientId
+        self.billing_contact_id = BillingContactId
+        self.contact_list = ContactList
+        self.address_list = AddressList
+        self.client = Client
 
 
-class ProjectCustomField(CustomField, Base):
+class ProjectCustomField(CustomField):
     def __init__(
         self,
         ProjectSid: str = None,
@@ -161,7 +161,7 @@ class ProjectCustomField(CustomField, Base):
         **kwargs
     ):
         super().__init__(Sid, Name, Value)
-        self.project_sid = ProjectSid
+        self.project_id = ProjectSid
 
 
 class TaskAssignment(Base):
@@ -171,8 +171,8 @@ class TaskAssignment(Base):
         Nm: str = None,
         **kwargs
     ):
-        self.StaffSid = StaffSid
-        self.Nm = Nm
+        self.staff_id = StaffSid
+        self.name = Nm
 
 
 class Task(Base):
@@ -207,33 +207,33 @@ class Task(Base):
         NoCharge: bool = None, 
         **kwargs
     ):
-        self.TaskSid = TaskSid
-        self.ProjectSid = ProjectSid
-        self.TaskNm = TaskNm
-        self.TaskGroup = TaskGroup
-        self.FullName = FullName
-        self.TaskType = TaskType
-        self.TaskType_nm = TaskType_nm
-        self.CurrentStatus = CurrentStatus
-        self.TaskId = TaskId
-        self.Priority = Priority
-        self.Notes = Notes
-        self.AssignCount = AssignCount
-        self.AssignmentList = AssignmentList
-        self.DueDt = DueDt
-        self.StartDt = StartDt
-        self.FeeOrExpense = FeeOrExpense
-        self.BudgetHours = BudgetHours
-        self.BudgetFees = BudgetFees
-        self.BudgetExps = BudgetExps
-        self.BudgetTotal = BudgetTotal
-        self.PerComp = PerComp
-        self.IsArchived = IsArchived
-        self.DefaultQBClass = DefaultQBClass
-        self.IsSeriesMaster = IsSeriesMaster
-        self.MasterTaskSid = MasterTaskSid
-        self.ParentSid = ParentSid
-        self.NoCharge = NoCharge
+        self.id = TaskSid
+        self.project_id = ProjectSid
+        self.name = TaskNm
+        self.group = TaskGroup
+        self.full_name = FullName
+        self.type_id = TaskType
+        self.type = TaskType_nm
+        self.current_status = CurrentStatus
+        self.task_id = TaskId
+        self.priority = Priority
+        self.notes = Notes
+        self.number_staff_assigned = AssignCount
+        self.staff_assigned = AssignmentList
+        self.due_date = DueDt
+        self.start_date = StartDt
+        self.fee_or_expense = FeeOrExpense
+        self.budget_hours = BudgetHours
+        self.budget_fees = BudgetFees
+        self.budget_expenses = BudgetExps
+        self.budget_total = BudgetTotal
+        self.percent_complete = PerComp
+        self.is_archived = IsArchived
+        self.default_qb_class = DefaultQBClass
+        self.is_series_master = IsSeriesMaster
+        self.master_task_id = MasterTaskSid
+        self.parent_id = ParentSid
+        self.no_charge = NoCharge
 
 
 class TaskBudgetData(Base):
@@ -248,14 +248,14 @@ class TaskBudgetData(Base):
         ExpensesBillable: str = None,
         TotalWip: str = None, **kwargs
     ):
-        self.TaskSid = TaskSid
-        self.HoursInput = HoursInput
-        self.HoursBill = HoursBill
-        self.FeesInput = FeesInput
-        self.FeesCost = FeesCost
-        self.ExpensesInput = ExpensesInput
-        self.ExpensesBillable = ExpensesBillable
-        self.TotalWip = TotalWip
+        self.task_id = TaskSid
+        self.input_hours = HoursInput
+        self.billable_hours = HoursBill
+        self.billable_fees = FeesInput
+        self.input_cost = FeesCost
+        self.input_expenses = ExpensesInput
+        self.billable_expenses = ExpensesBillable
+        self.total_work_in_progress = TotalWip
 
 
 class ProjectBudget(Base):
@@ -265,8 +265,8 @@ class ProjectBudget(Base):
         TaskBudgets: list[TaskBudgetData] = None,
         **kwargs
     ):
-        self.ProjectSid = ProjectSid
-        self.TaskBudgets = TaskBudgets
+        self.project_id = ProjectSid
+        self.task_budgets = TaskBudgets
 
 
 class LineItem(Base):
@@ -297,30 +297,30 @@ class LineItem(Base):
         SalesTaxNm: str = None,
         Source: str = None, **kwargs
     ):
-        self.LineNbr = LineNbr
-        self.Nm = Nm
-        self.Nt = Nt
-        self.AcctSid = AcctSid
-        self.BudgetPer = BudgetPer
-        self.IsCredit = IsCredit
-        self.IsNonTimeCharge = IsNonTimeCharge
-        self.IsTaxable = IsTaxable
-        self.QBClassSid = QBClassSid
-        self.Quantity = Quantity
-        self.Rate = Rate
-        self.Amt = Amt
-        self.SalesTaxSid = SalesTaxSid
-        self.SubTotalSid = SubTotalSid
-        self.UpdatedLineNbr = UpdatedLineNbr
-        self.IsDeleted = IsDeleted
-        self.AcctSidNm = AcctSidNm
-        self.InvoiceSid = InvoiceSid
-        self.LineType = LineType
-        self.ProjectSid = ProjectSid
-        self.QBClassNm = QBClassNm
-        self.SalesTaxAmt = SalesTaxAmt
-        self.SalesTaxNm = SalesTaxNm
-        self.Source = Source
+        self.line_number = LineNbr
+        self.name = Nm
+        self.nt = Nt # TODO Figure out what this is
+        self.account_id = AcctSid # TODO Figure out what this is
+        self.budget_percent = BudgetPer # TODO Figure out what this is
+        self.is_credit = IsCredit
+        self.is_non_time_charge = IsNonTimeCharge
+        self.is_taxable = IsTaxable
+        self.qb_class_id = QBClassSid
+        self.quantity = Quantity
+        self.rate = Rate
+        self.amount = Amt
+        self.sales_tax_id = SalesTaxSid
+        self.subtotal_id = SubTotalSid
+        self.updated_line_number = UpdatedLineNbr
+        self.is_deleted = IsDeleted
+        self.account_name = AcctSidNm
+        self.invoice_id = InvoiceSid
+        self.type = LineType # TODO Figure out what this is
+        self.project_id = ProjectSid
+        self.qb_class_name = QBClassNm
+        self.sales_tax_amount = SalesTaxAmt
+        self.sales_tax_name = SalesTaxNm
+        self.source = Source # TODO Figure out what this is
 
 
 class Invoice(Base):
@@ -359,37 +359,37 @@ class Invoice(Base):
         Lines: list[LineItem] = None,
         **kwargs
     ):
-        self.Sid = Sid
-        self.ClientSid = ClientSid
-        self.ProjectSid = ProjectSid
-        self.ClientNm = ClientNm
-        self.DName = DName
-        self.BillingContactId = BillingContactId
-        self.Calculator = Calculator
-        self.CanEditInvoice = CanEditInvoice
-        self.InvoiceNbr = InvoiceNbr
-        self.InvoiceDt = InvoiceDt
-        self.InvoiceAmt = InvoiceAmt
-        self.Subtotal = Subtotal
-        self.TotalAmt = TotalAmt
-        self.PaidAmt = PaidAmt
-        self.SalesTaxAmt = SalesTaxAmt
-        self.InvoiceDtSt = InvoiceDtSt
-        self.InvoiceDtEnd = InvoiceDtEnd
-        self.InvoiceDtSent = InvoiceDtSent
-        self.Note1 = Note1
-        self.Note2 = Note2
-        self.PONumber = PONumber
-        self.Status = Status
-        self.StatusTxt = StatusTxt
-        self.ARAcctSid = ARAcctSid
-        self.SalesTaxSid = SalesTaxSid
-        self.TermsSid = TermsSid
-        self.InvoiceDtDue = InvoiceDtDue
-        self.PostedStatus = PostedStatus
-        self.BillingAddress = BillingAddress
-        self.FirmAddress = FirmAddress
-        self.Lines = Lines
+        self.id = Sid
+        self.client_id = ClientSid
+        self.project_id = ProjectSid
+        self.client_name = ClientNm
+        self.display_name = DName
+        self.billing_contact_id = BillingContactId
+        self.calculator = Calculator
+        self.can_edit_invoice = CanEditInvoice
+        self.invoice_number = InvoiceNbr
+        self.invoice_date = InvoiceDt
+        self.invoice_amount = InvoiceAmt
+        self.subtotal = Subtotal
+        self.total_amount = TotalAmt
+        self.paid_amount = PaidAmt
+        self.sales_tax_amount = SalesTaxAmt
+        self.start_date = InvoiceDtSt
+        self.end_date = InvoiceDtEnd
+        self.sent_date = InvoiceDtSent
+        self.note_1 = Note1
+        self.note_2 = Note2
+        self.purchase_order_number = PONumber
+        self.status_id = Status
+        self.status = StatusTxt
+        self.accounts_receivable_id = ARAcctSid
+        self.sales_tax_id = SalesTaxSid
+        self.terms_id = TermsSid
+        self.due_date = InvoiceDtDue
+        self.posted_status = PostedStatus
+        self.billing_address = BillingAddress
+        self.firm_address = FirmAddress
+        self.lines = Lines
 
 
 class Report(Base):
@@ -399,8 +399,8 @@ class Report(Base):
         FieldList = None,
         **kwargs
     ):
-        self.Data = Data
-        self.FieldList = FieldList
+        self.data = Data
+        self.field_list = FieldList
 
 
 class User(Base):
@@ -412,10 +412,10 @@ class User(Base):
         Email: str = None,
         **kwargs
     ):
-        self.StaffSid = StaffSid
-        self.FName = FName
-        self.SName = SName
-        self.Email = Email
+        self.id = StaffSid
+        self.first_name = FName
+        self.last_name = SName
+        self.email = Email
 
 
 class Rate(Base):
@@ -427,10 +427,10 @@ class Rate(Base):
         TaskSid = None,
         **kwargs
     ):
-        self.ProjectSid = ProjectSid
-        self.StaffSid = StaffSid
-        self.TaskSid = TaskSid
-        self.RateValue = RateValue
+        self.project_id = ProjectSid
+        self.staff_id = StaffSid
+        self.task_id = TaskSid
+        self.value = RateValue
 
 
 class ProjectTeamMember(Base):
@@ -441,9 +441,9 @@ class ProjectTeamMember(Base):
         TeamLead: bool = False,
         **kwargs
     ):
-        self.StaffSid = StaffSid
-        self.ContactRole = ContactRole
-        self.TeamLead = TeamLead
+        self.staff_id = StaffSid
+        self.role = ContactRole
+        self.team_lead = TeamLead
 
 
 class Expense(Base):
@@ -488,44 +488,44 @@ class Expense(Base):
         IsVenderExpense: bool = None,
         ExpenseReceipt = None, **kwargs
     ):
-        self.Sid = Sid
-        self.IsSubmitted = IsSubmitted
-        self.RptSid = RptSid
-        self.StaffSid = StaffSid
-        self.Dt = Dt
-        self.ProjectSid = ProjectSid
-        self.ProjectNm = ProjectNm
-        self.ClientId = ClientId
-        self.ClientNm = ClientNm
-        self.CatSid = CatSid
-        self.CatNm = CatNm
-        self.TaskSid = TaskSid
-        self.TaskNm = TaskNm
-        self.VendorSid = VendorSid
-        self.VendorNm = VendorNm
-        self.CCardSid = CCardSid
-        self.BillSid = BillSid
-        self.NoCharge = NoCharge
-        self.PaidByCo = PaidByCo
-        self.Nt = Nt
-        self.CostIn = CostIn
-        self.CostPayable = CostPayable
-        self.CostBill = CostBill
-        self.IsUnit = IsUnit
-        self.UnitPrice = UnitPrice
-        self.UnitRate = UnitRate
-        self.Units = Units
-        self.UOM = UOM
-        self.DueDate = DueDate
-        self.RefNbr = RefNbr
-        self.HasReceipt = HasReceipt
-        self.IsApproved = IsApproved
-        self.ApprovalStatus = ApprovalStatus
-        self.ApprovalStatusNm = ApprovalStatusNm
-        self.InvoiceSid = InvoiceSid
-        self.IsInvoiced = IsInvoiced
-        self.IsVenderExpense = IsVenderExpense
-        self.ExpenseReceipt = ExpenseReceipt
+        self.id = Sid
+        self.is_submitted = IsSubmitted
+        self.report_id = RptSid
+        self.staff_id = StaffSid
+        self.date = Dt
+        self.project_id = ProjectSid
+        self.project = ProjectNm
+        self.client_id = ClientId
+        self.client = ClientNm
+        self.category_id = CatSid
+        self.category = CatNm
+        self.task_id = TaskSid
+        self.task = TaskNm
+        self.vendor_id = VendorSid
+        self.vendor = VendorNm
+        self.credit_card_id = CCardSid
+        self.bill_id = BillSid
+        self.no_charge = NoCharge
+        self.paid_by_company = PaidByCo
+        self.notes = Nt
+        self.input_amount = CostIn
+        self.reimbursable_amount = CostPayable
+        self.billable_amount = CostBill
+        self.is_unit = IsUnit
+        self.unit_price = UnitPrice
+        self.unit_rate = UnitRate
+        self.units = Units
+        self.unit_of_measure = UOM
+        self.due_date = DueDate
+        self.reference_number = RefNbr
+        self.has_receipt = HasReceipt
+        self.is_approved = IsApproved
+        self.approval_status_id = ApprovalStatus
+        self.approval_status = ApprovalStatusNm
+        self.invoice_id = InvoiceSid
+        self.is_invoiced = IsInvoiced
+        self.is_vendor_expense = IsVenderExpense
+        self.expense_receipt = ExpenseReceipt
 
 
 class ExpenseReport(Base):
@@ -537,10 +537,10 @@ class ExpenseReport(Base):
         StatusId: str = None,
         **kwargs
     ):
-        self.Sid = Sid
-        self.RptNm = RptNm
-        self.CreatedDt = CreatedDt
-        self.StatusId = StatusId
+        self.id = Sid
+        self.report_name = RptNm
+        self.date_created = CreatedDt
+        self.status_id = StatusId
 
 
 class Picklist(Base):
@@ -577,7 +577,7 @@ class PicklistIdName(Base):
         self.name = Name
 
 
-class PicklistProject(PicklistIdName, Base):
+class PicklistProject(PicklistIdName):
     def __init__(
         self,
         Id: str = None,
@@ -588,7 +588,7 @@ class PicklistProject(PicklistIdName, Base):
         super().__init__(Id, Name, **kwargs)
         self.group = Group
 
-class PicklistClient(PicklistIdName, Base):
+class PicklistClient(PicklistIdName):
     def __init__(
         self,
         Id : str = None,
@@ -624,27 +624,27 @@ class Time(Base):
         BillRate = None,
         **kwargs,
     ):
-        self.SID = SID
-        self.IsNew = IsNew
-        self.Dt = Dt
-        self.ProjectSID = ProjectSID
-        self.ProjectNm = ProjectNm
-        self.ClientId = ClientId
-        self.ClientNm = ClientNm
-        self.StaffSID = StaffSID
-        self.SourceNm = SourceNm
-        self.TaskSID = TaskSID
-        self.TaskNm = TaskNm
-        self.Hours_In = Hours_IN
-        self.Notes = Notes
-        self.RevisionNotes = RevisionNotes
-        self.NoCharge = NoCharge
-        self.IsApproved = IsApproved
-        self.InvoiceSID = InvoiceSID
-        self.IsInvoiced = IsInvoiced
-        self.HoursBillable = HoursBillable
-        self.BillRate = BillRate
-        self.ChargeBillable = ChargeBillable
+        self.id = SID
+        self.is_new = IsNew
+        self.date = Dt
+        self.project_id = ProjectSID
+        self.project = ProjectNm
+        self.client_id = ClientId
+        self.client = ClientNm
+        self.staff_id = StaffSID
+        self.staff = SourceNm
+        self.task_id = TaskSID
+        self.task = TaskNm
+        self.input_hours = Hours_IN
+        self.notes = Notes
+        self.revision_notes = RevisionNotes
+        self.no_charge = NoCharge
+        self.is_approved = IsApproved
+        self.invoice_id = InvoiceSID
+        self.is_invoiced = IsInvoiced
+        self.billable_hours = HoursBillable
+        self.billing_rate = BillRate
+        self.billable_charges = ChargeBillable
 
 
 class Timesheet(Base):
@@ -683,7 +683,7 @@ class ProjectTimesheet(Timesheet):
         timesheet = None, **kwargs
     ):
         super().__init__(start_date, end_date, timesheet)
-        self.projectSID = projectSID
+        self.project_id = projectSID
 
 
 class StaffTimesheet(Timesheet):
@@ -695,7 +695,7 @@ class StaffTimesheet(Timesheet):
         timesheet = None, **kwargs
     ):
         super().__init__(start_date, end_date, timesheet)
-        self.staffSID = staffSID
+        self.staff_id = staffSID
 
 
 class Ticket: ...
