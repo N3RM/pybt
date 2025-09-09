@@ -1,24 +1,38 @@
-from api_wrapper.models import Result, Time
+from datetime import date
+from api_wrapper.utils import format_bigtime_date
+
+from api_wrapper.models import Result, Time, StaffTimesheet, ProjectTimesheet
 
 class _Time:
     def __init__(self, method):
         self._endpoint = "Time"
         self._method = method
 
-    def __call__(self, show_inactive : bool = False) -> list[Time]:
+    def __call__(self, id : str = None, time : Time = None, mark_submitted : bool = False) -> Time:
         params = {}
-        if show_inactive:
-            params["show_inactive"] = "true"
-        result: Result = self._method(endpoint=f"{self._endpoint}", params=params)
-        return [Time(**time) for time in result.data]
-
-    def _detail(self, time_id : str = None, view : str = None, show_all_contacts : bool = False, time : Time = None) -> Time | Result:
-        params = {}
-        if view:
-            params["view"] = view
-        if show_all_contacts:
-            params["showallcontacts"] = "true"
         if time:
             params = {**time}
-        result: Result = self._method(endpoint=f"{self._endpoint}/Detail/{time_id}" if time_id else f"{self._endpoint}/Detail", params=params)
-        return Time(**result.data) if result.data else f"{result.status_code}: {result.message}"
+        if mark_submitted:
+            params["marksubmitted"] = "true"
+        result: Result = self._method(endpoint=f"{self._endpoint}/{id}", params=params)
+        return Time(**result.data)
+
+    def _sheet(self, staff_id : str, start_date : date, end_date : date, view : str = "detailed") -> StaffTimesheet:
+        params = {}
+        params["startdt"] = format_bigtime_date(start_date)
+        params["enddt"] = format_bigtime_date(end_date)
+        if view:
+            params["view"] = view
+        result: Result = self._method(endpoint=f"{self._endpoint}/Sheet/{staff_id}", params=params)
+        return StaffTimesheet(staffSID=staff_id, start_date=start_date, end_date=end_date, timesheet=[Time(**time) for time in result.data])
+    
+    def _by_project(self, project_id : str, start_date : date, end_date : date, view : str = "detailed", is_approved : bool = False) -> ProjectTimesheet:
+        params = {}
+        params["startdt"] = format_bigtime_date(start_date)
+        params["enddt"] = format_bigtime_date(end_date)
+        if view:
+            params["view"] = view
+        if is_approved:
+            params["isapproved"] = "true"
+        result: Result = self._method(endpoint=f"{self._endpoint}/ByProject/{project_id}", params=params)
+        return ProjectTimesheet(projectSID=project_id, start_date=start_date, end_date=end_date, timesheet=[Time(**time) for time in result.data])

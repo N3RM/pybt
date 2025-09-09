@@ -670,12 +670,12 @@ class Timesheet(Base):
         self,
         start_date: str = None,
         end_date: str = None,
-        timesheet = None,
+        time_entries: list[Time] = None,
         **kwargs
     ):
         self.start_date = start_date
         self.end_date = end_date
-        self.timesheet = timesheet
+        self.time_entries = time_entries
 
     def __str__(self):
         timelist = []
@@ -692,27 +692,25 @@ class Timesheet(Base):
         return str(timelist)
 
 
-class ProjectTimesheet(Timesheet):
+class ProjectTimesheet(Base):
     def __init__(
         self,
         projectSID: str = None,
-        start_date: str = None,
-        end_date: str = None,
-        timesheet = None, **kwargs
+        timesheet: Timesheet = None,
+        **kwargs
     ):
-        super().__init__(start_date, end_date, timesheet)
+        self.timesheet = timesheet
         self.project_id = projectSID
 
 
-class StaffTimesheet(Timesheet):
+class StaffTimesheet(Base):
     def __init__(
         self,
         staffSID: str = None,
-        start_date: str = None,
-        end_date: str = None,
-        timesheet = None, **kwargs
+        timesheet: Timesheet = None,
+        **kwargs
     ):
-        super().__init__(start_date, end_date, timesheet)
+        self.timesheet = timesheet
         self.staff_id = staffSID
 
 

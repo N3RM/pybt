@@ -1,4 +1,4 @@
-from api_wrapper.models import Picklist, Result, PicklistIdName, PicklistProject, Timesheet, StaffTimesheet, Time, Project, Contact, ProjectTeamMember, Task, Client
+from api_wrapper import models
 from api_wrapper.endpoints import _Picklist, _Project, _Client
 
 class Get:
@@ -34,27 +34,27 @@ class Get:
         def __init__(self, method):
             self._project = _Project(method)
 
-        def __call__(self, show_inactive : bool = False) -> ProjectList:
+        def __call__(self, show_inactive : bool = False) -> models.ProjectList:
             return self._project(show_inactive)
 
-        def detail(self, project_id : str, view : str = None, show_all_contacts : bool = False) -> Project:
+        def detail(self, project_id : str, view : str = None, show_all_contacts : bool = False) -> models.Project:
             return self._project._detail(project_id, view, show_all_contacts)
         
-        def contacts(self, project_id : str) -> ContactList:
+        def contacts(self, project_id : str) -> models.ContactList:
             return self._project._contacts(project_id)
         
-        def contact(self, project_id : str, contact_id : str) -> Contact:
+        def contact(self, project_id : str, contact_id : str) -> models.Contact:
             return self._project._contact(project_id=project_id, contact_id=contact_id)
         
-        def team(self, project_id) -> ProjectTeam:
+        def team(self, project_id) -> models.ProjectTeam:
             return self._project._team(project_id=project_id)
         
     class _Get_Client:
         def __init__(self, method):
             self._client = _Client(method)
 
-        def __call__(self, show_inactive : bool = False) -> ClientList:
+        def __call__(self, show_inactive : bool = False) -> models.ClientList:
             return self._client(show_inactive)
 
-        def detail(self, client_id : str, view : str = None) -> Client:
+        def detail(self, client_id : str, view : str = None) -> models.Client:
             return self._client._detail(client_id, view)
