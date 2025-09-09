@@ -37,23 +37,27 @@ class BigTimeAPI:
                 return self._clients()
             
             def staff(self, show_inactive : bool = False):
-                return self._staff(show_inactive=show_inactive)
+                return self._staff(show_inactive)
             
             def all_tasks_by_project(self, project_sid : str, budget_type : str = None, show_inactive : bool = False):
-                return self._all_tasks_by_project(project_sid=project_sid, budget_type=budget_type, show_inactive=show_inactive)
+                return self._all_tasks_by_project(project_sid, budget_type, show_inactive)
             
             def estimates_by_project(self, project_sid : str, staff_sid : str = None, budget_type : str = None, show_inactive : bool = False):
-                return self._estimates_by_project(project_sid=project_sid, staff_sid=staff_sid, budget_type=budget_type, show_inactive=show_inactive)
+                return self._estimates_by_project(project_sid, staff_sid, budget_type, show_inactive)
             
             def field_values(self, sid : str, show_inactive : bool = False):
-                return self._field_values(sid=sid, show_inactive=show_inactive)
+                return self._field_values(sid, show_inactive)
             
-        class _Get_Project(_Project):
+        class _Get_Project:
             def __init__(self, method):
-                super().__init__(method=method)
+                self._project = _Project(method)
+
+            def __call__(self, show_inactive : bool = False):
+                return self._project(show_inactive)
 
             def detail(self, project_sid : str = None, view : str = None, show_all_contacts : bool = False) -> Project:
-                return self._detail(project_sid=project_sid, view=view, show_all_contacts=show_all_contacts)
+                return self._project._detail(project_sid, view, show_all_contacts)
+            
     
     class _Create:
         def __init__(self, api):
