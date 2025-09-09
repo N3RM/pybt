@@ -58,6 +58,9 @@ class BigTimeAPI:
             def detail(self, project_sid : str = None, view : str = None, show_all_contacts : bool = False) -> Project:
                 return self._project._detail(project_sid, view, show_all_contacts)
             
+            def contacts(self, project_sid : str = None):
+                return self._project._contacts(project_sid)
+            
     
     class _Create:
         def __init__(self, api):

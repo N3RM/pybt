@@ -12,25 +12,25 @@ class _Picklist:
         but testing shows that it only returns a list of all projects that the current user can see
         regardless of if the staffsid is included or not.
         """
-        params = None
+        params = {}
         if staff_sid:
             params["staffsid"] = staff_sid
-        result: Result = self._method(endpoint=f"{self._endpoint}/Projects/", params=params)
+        result: Result = self._method(endpoint=f"{self._endpoint}/Projects", params=params)
         return Picklist([PicklistProject(**project) for project in result.data])
     
     def _clients(self):
-        result: Result = self._clients(endpoint=f"{self._endpoint}/Clients/", params=None)
+        result: Result = self._clients(endpoint=f"{self._endpoint}/Clients", params=None)
         return result # modify to put data into model class before returning
     
     def _staff(self, show_inactive : bool = False):
-        params = None
+        params = {}
         if show_inactive:
             params["showinactive"] = "true"
-        result: Result = self._method(endpoint=f"{self._endpoint}/Staff/", params=params)
+        result: Result = self._method(endpoint=f"{self._endpoint}/Staff", params=params)
         return result # modify to put data into model class before returning
     
     def _all_tasks_by_project(self, project_sid : str, budget_type : str = None, filter_id : str = None, show_inactive : bool = False):
-        params = None
+        params = {}
         if budget_type:
             params["budgettype"] = budget_type
         if show_inactive:
@@ -40,7 +40,7 @@ class _Picklist:
         return result # modify to put data into model class before returning
     
     def _estimates_by_project(self, project_sid : str, staff_sid : str = None, budget_type : str = None, show_inactive : bool = False):
-        params = None
+        params = {}
         if staff_sid:
             params["staffsid"] = staff_sid
         if budget_type:
@@ -56,5 +56,5 @@ class _Picklist:
         params["sid"] = sid
         if show_inactive:
             params = {"showinactive": "true"}
-        result: Result = self._method(endpoint=f"{self._endpoint}/FieldValues/", params=params)
+        result: Result = self._method(endpoint=f"{self._endpoint}/FieldValues", params=params)
         return result # modify to put data into model class before returning

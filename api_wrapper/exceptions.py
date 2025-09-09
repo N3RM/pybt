@@ -1,2 +1,2 @@
 class BigTimeAPIException(Exception):
-    pass
+    ...

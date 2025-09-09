@@ -38,13 +38,14 @@ class RestAdapter:
             )
         except requests.exceptions.RequestException as e:
             raise BigTimeAPIException("Request Failed") from e
-        try:
-            data_out = response.json()
-        except (ValueError, JSONDecodeError) as e:
-            raise BigTimeAPIException("Bad JSON in response") from e
         if 299 >= response.status_code >= 200:  # OK
+            try:
+                data_out = response.json()
+            except (ValueError, JSONDecodeError) as e:
+                raise BigTimeAPIException("Bad JSON in response", response) from e
             return Result(response.status_code, message=response.reason, data=data_out)
         raise BigTimeAPIException(f"{response.status_code}: {response.reason}")
+        
 
     def get(self, endpoint: str, params = None) -> Result:
         return self._do(http_method="GET", endpoint=endpoint, ep_params=params)
