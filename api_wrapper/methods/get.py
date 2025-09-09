@@ -144,7 +144,7 @@ class Get:
             self._time = _Time(method)
 
         def __call__(self, time_id : str):
-            return self._time(id=time_id)
+            return self._time(time_id=time_id)
         
         def sheet(self, staff_id : str, start_date : date, end_date : date, view : str = "Detailed"):
             return self._time._sheet(staff_id=staff_id, start_date=start_date, end_date=end_date, view=view)

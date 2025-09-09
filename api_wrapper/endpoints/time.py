@@ -8,13 +8,13 @@ class _Time:
         self._endpoint = "Time"
         self._method = method
 
-    def __call__(self, id : str = None, time : Time = None, mark_submitted : bool = False) -> Time:
+    def __call__(self, time_id : str = None, time : Time = None, mark_submitted : bool = False) -> Time:
         params = {}
         if time:
             params = {**time}
         if mark_submitted:
             params["marksubmitted"] = "true"
-        result: Result = self._method(endpoint=f"{self._endpoint}/{id}", params=params)
+        result: Result = self._method(endpoint=f"{self._endpoint}/{time_id}", params=params)
         return Time(**result.data)
 
     def _sheet(self, staff_id : str, start_date : date, end_date : date, view : str = "detailed") -> StaffTimesheet:
