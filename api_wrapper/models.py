@@ -41,6 +41,14 @@ class CustomField(Base):
         self.value: str = Value
 
 
+class CustomFields(Base):
+    def __init__(
+            self,
+            field_list: list[CustomField]
+    ):
+        self.field_list = field_list
+
+
 class Address(Base):
     def __init__(
         self,
@@ -444,6 +452,16 @@ class ProjectTeamMember(Base):
         self.staff_id = StaffSid
         self.role = ContactRole
         self.team_lead = TeamLead
+
+
+class ProjectTeam(Base):
+    def __init__(
+            self,
+            team_members: list[ProjectTeamMember],
+            project_id: str,
+    ):
+        self.team_members = team_members
+        self.project_id = project_id
 
 
 class Expense(Base):

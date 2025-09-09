@@ -1,2 +1,10 @@
 from api_wrapper.endpoints.picklist import _Picklist as _Picklist
 from api_wrapper.endpoints.projects import _Project as _Project
+from api_wrapper.endpoints.clients import _Client as _Client
+from api_wrapper.endpoints.expenses import _Expense as _Expense
+from api_wrapper.endpoints.invoices import _Invoice as _Invoice
+from api_wrapper.endpoints.payments import _Payment as _Payment
+from api_wrapper.endpoints.reports import _Report as _Report
+from api_wrapper.endpoints.staff import _Staff as _Staff
+from api_wrapper.endpoints.tasks import _Task as _Task
+from api_wrapper.endpoints.time import _Time as _Time
