@@ -21,10 +21,10 @@ class Get:
             self._client = _Client(method)
 
         def __call__(self, show_inactive : bool = False):
-            return self._client(show_inactive)
+            return self._client(show_inactive=show_inactive)
 
         def detail(self, client_id : str, view : str = None):
-            return self._client._detail(client_id, view)
+            return self._client._detail(client_id=client_id, view=view)
         
 
     class _Get_Expense:

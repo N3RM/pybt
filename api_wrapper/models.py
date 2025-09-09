@@ -1,7 +1,7 @@
 from datetime import date
 
 class Base:
-    def __str__(self):
+    def __repr__(self):
         return str(
             {
                 key: value
@@ -96,12 +96,10 @@ class Client(Base):
         self,
         SystemId: str = None,
         Nm: str = None,
-        ClientId: str = None,
         **kwargs
     ):
-        self.project_id = SystemId # TODO Verify that this is project ID
+        self.id = SystemId
         self.name = Nm
-        self.id = ClientId
 
 
 class Project(Base):
@@ -569,7 +567,7 @@ class Picklist(Base):
     ):
         self.result = result
 
-    def __str__(self):
+    def __repr__(self):
         datalist = []
         for data in self.result:
             datalist.append(
@@ -677,7 +675,7 @@ class Timesheet(Base):
         self.end_date = end_date
         self.time_entries = time_entries
 
-    def __str__(self):
+    def __repr__(self):
         timelist = []
         for time in self.timesheet:
             timelist.append(
