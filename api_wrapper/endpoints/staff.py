@@ -12,12 +12,10 @@ class _Staff:
         result: Result = self._method(endpoint=f"{self._endpoint}", params=params)
         return [User(**staff) for staff in result.data]
 
-    def _detail(self, staff_id : str = None, view : str = None, show_all_contacts : bool = False, staff : User = None) -> User | Result:
+    def _detail(self, staff_id : str = None, view : str = None, staff : User = None) -> User | Result:
         params = {}
         if view:
             params["view"] = view
-        if show_all_contacts:
-            params["showallcontacts"] = "true"
         if staff:
             params = {**staff}
         result: Result = self._method(endpoint=f"{self._endpoint}/Detail/{staff_id}" if staff_id else f"{self._endpoint}/Detail", params=params)

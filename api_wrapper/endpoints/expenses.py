@@ -1,24 +1,31 @@
-from api_wrapper.models import Result
+from api_wrapper.models import Result, Expense, ExpenseReport
 
 class _Expense:
     def __init__(self, method):
         self._endpoint = "Expense"
         self._method = method
 
-    def __call__(self, show_inactive : bool = False) -> list[Expense]:
+    def _detail(self, expense_id : str = None, expense : Expense = None) -> Expense | str:
         params = {}
-        if show_inactive:
-            params["show_inactive"] = "true"
-        result: Result = self._method(endpoint=f"{self._endpoint}", params=params)
-        return [Expense(**expense) for expense in result.data]
-
-    def _detail(self, expense_id : str = None, view : str = None, show_all_contacts : bool = False, expense : Expense = None) -> Expense | Result:
-        params = {}
-        if view:
-            params["view"] = view
-        if show_all_contacts:
-            params["showallcontacts"] = "true"
         if expense:
             params = {**expense}
         result: Result = self._method(endpoint=f"{self._endpoint}/Detail/{expense_id}" if expense_id else f"{self._endpoint}/Detail", params=params)
         return Expense(**result.data) if result.data else f"{result.status_code}: {result.message}"
+    
+    def _report(self, report_id : str = "0", staff_id : str = None, view : str = "Detailed") -> ExpenseReport:
+        params = {}
+        if staff_id:
+            params["staffsid"] = staff_id
+        if view:
+            params["view"] = view
+        result: Result = self._method(endpoint=f"{self._endpoint}/Report/{report_id}", params=params)
+        return ExpenseReport(**result.data)
+    
+    def _reports(self, staff_id : str = None, show_all : bool = False) -> list[ExpenseReport]:
+        params = {}
+        if staff_id:
+            params["staffsid"] = staff_id
+        if show_all:
+            params["showall"] = "true"
+        result: Result = self._method(endpoint=f"{self._endpoint}/Reports", params=params)
+        return [ExpenseReport(**report) for report in result.data]

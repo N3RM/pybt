@@ -1,24 +1,19 @@
+from datetime import date
+
 from api_wrapper.models import Result, Report
+from api_wrapper.utils import format_bigtime_date
 
 class _Report:
     def __init__(self, method):
         self._endpoint = "Report"
         self._method = method
 
-    def __call__(self, show_inactive : bool = False) -> list[Report]:
+    def _data(self, report_id : str = None, start_date : date = None, end_date : date = None) -> Report | Result:
         params = {}
-        if show_inactive:
-            params["show_inactive"] = "true"
-        result: Result = self._method(endpoint=f"{self._endpoint}", params=params)
-        return [Report(**report) for report in result.data]
+        if start_date:
+            params["startdt"] = format_bigtime_date(start_date)
+        if end_date:
+            params["enddt"] = format_bigtime_date(end_date)
 
-    def _detail(self, report_id : str = None, view : str = None, show_all_contacts : bool = False, report : Report = None) -> Report | Result:
-        params = {}
-        if view:
-            params["view"] = view
-        if show_all_contacts:
-            params["showallcontacts"] = "true"
-        if report:
-            params = {**report}
-        result: Result = self._method(endpoint=f"{self._endpoint}/Detail/{report_id}" if report_id else f"{self._endpoint}/Detail", params=params)
-        return Report(**result.data) if result.data else f"{result.status_code}: {result.message}"
+        result: Result = self._method(endpoint=f"{self._endpoint}/Data/{report_id}", params=params)
+        return Report(**result.data)
