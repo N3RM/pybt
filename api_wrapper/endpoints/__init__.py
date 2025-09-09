@@ -1,2 +1,2 @@
-from api_wrapper.endpoints.bt_async import AsyncEndPoint as AsyncEndPoint
-from api_wrapper.endpoints.picklist import PicklistEndPoint as PicklistEndPoint
+from api_wrapper.endpoints.picklist import _Picklist as _Picklist
+from api_wrapper.endpoints.projects import _Project as _Project

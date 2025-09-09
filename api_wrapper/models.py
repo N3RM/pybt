@@ -1,6 +1,3 @@
-from typing import List, Dict
-
-
 class Base:
     def __str__(self):
         return str(
@@ -18,7 +15,10 @@ class Result(Base):
     def __init__(self, status_code: int, message: str = "", data = None):
         self.status_code = str(status_code)
         self.message = str(message)
-        self.data = data if data else []
+        self.data = data if data else None
+
+    def __repr__(self):
+        return f"{self.status_code}: {self.message}"
 
 
 class CustomField(Base):
@@ -95,8 +95,8 @@ class Project(Base):
         QBCustomerId: str,
         ClientId: str,
         BillingContactId: str,
-        ContactList: List[Contact],
-        AddressList: List[Address],
+        ContactList: list[Contact],
+        AddressList: list[Address],
         Client: Client,
         **kwargs,
     ):
@@ -153,7 +153,7 @@ class Task(Base):
         Priority: str,
         Notes: str,
         AssignCount: str,
-        AssignmentList: List[TaskAssignment],
+        AssignmentList: list[TaskAssignment],
         DueDt: str,
         StartDt: str,
         FeeOrExpense: str,
@@ -222,7 +222,7 @@ class TaskBudgetData(Base):
 
 
 class ProjectBudget(Base):
-    def __init__(self, ProjectSid: str, TaskBudgets: List[TaskBudgetData], **kwargs):
+    def __init__(self, ProjectSid: str, TaskBudgets: list[TaskBudgetData], **kwargs):
         self.ProjectSid = ProjectSid
         self.TaskBudgets = TaskBudgets
 
@@ -314,7 +314,7 @@ class Invoice(Base):
         PostedStatus: str,
         BillingAddress: Address,
         FirmAddress: Address,
-        Lines: List[LineItem], **kwargs
+        Lines: list[LineItem], **kwargs
     ):
         self.Sid = Sid
         self.ClientSid = ClientSid
@@ -499,6 +499,10 @@ class PicklistProject(PicklistIdName, Base):
     def __init__(self, Id: str, Name: str, Group: str, **kwargs):
         super().__init__(Id, Name, **kwargs)
         self.group = Group
+
+class PicklistClient(PicklistIdName, Base):
+    def __init__(self, Id : str, Name : str, **kwargs):
+        super().__init__(Id, Name, **kwargs)
 
 
 class Time(Base):
