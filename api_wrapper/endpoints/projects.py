@@ -1,4 +1,4 @@
-from api_wrapper.models import Result, Project, Contact, ProjectTeam, ProjectTeamMember, CustomFields, CustomField
+from api_wrapper.models import Result, Project, Contact, ProjectTeam, ProjectTeamMember, CustomField
 
 class _Project:
     def __init__(self, method):
@@ -46,9 +46,9 @@ class _Project:
         result: Result = self._method(endpoint=f"{self._endpoint}/Team/{project_id}", params=params)
         return ProjectTeam([ProjectTeamMember(**member) for member in result.data], project_id) if result.data else f"{result.status_code}: {result.message}"
     
-    def _custom_fields(self, project_id : str = None, custom_fields : CustomFields = None):
+    def _custom_fields(self, project_id : str = None, custom_fields : list[CustomField] = None):
         params = {}
         if custom_fields:
-            params = {"customfields": CustomFields.field_list}
+            params = {"customfields": custom_fields}
         result: Result = self._method(endpoint=f"{self._endpoint}/CustomFields/{project_id}", params=params)
-        return CustomFields([CustomField(**field) for field in result.data])
+        return [CustomField(**field) for field in result.data]

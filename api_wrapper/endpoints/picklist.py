@@ -1,11 +1,11 @@
-from api_wrapper.models import Result, Picklist, PicklistProject
+from api_wrapper.models import Result, PicklistProject, PicklistFieldValueChoices
 
 class _Picklist:
     def __init__(self, method):
         self._endpoint = "Picklist"
         self._method = method
 
-    def _projects(self, staff_sid : str = None):
+    def _projects(self, staff_sid : str = None) -> list[PicklistProject]:
         """
         Get a list of projects that the current user has permissions to see.
         BigTime API docs say that you can include staffsid to see only projects that staffer is on,
@@ -16,10 +16,10 @@ class _Picklist:
         if staff_sid:
             params["staffsid"] = staff_sid
         result: Result = self._method(endpoint=f"{self._endpoint}/Projects", params=params)
-        return Picklist([PicklistProject(**project) for project in result.data])
+        return [PicklistProject(**project) for project in result.data]
     
     def _clients(self):
-        result: Result = self._clients(endpoint=f"{self._endpoint}/Clients", params=None)
+        result: Result = self._method(endpoint=f"{self._endpoint}/Clients", params=None)
         return result # modify to put data into model class before returning
     
     def _staff(self, show_inactive : bool = False):
@@ -51,10 +51,9 @@ class _Picklist:
         result: Result = self._method(endpoint=f"{self._endpoint}/EstimatesByProjects/{project_sid}", params=params)
         return result # modify to put data into model class before returning
     
-    def _field_values(self, sid : str, show_inactive : bool = False):
+    def _field_values(self, field : PicklistFieldValueChoices, show_inactive : bool = False):
         params = {}
-        params["sid"] = sid
         if show_inactive:
             params = {"showinactive": "true"}
-        result: Result = self._method(endpoint=f"{self._endpoint}/FieldValues", params=params)
+        result: Result = self._method(endpoint=f"{self._endpoint}/FieldValues/{field}", params=params)
         return result # modify to put data into model class before returning

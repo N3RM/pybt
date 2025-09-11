@@ -1,4 +1,4 @@
-from api_wrapper.models import Client, Expense, Project, Contact, User, Task, Time, Invoice, ProjectTeam, CustomFields
+from api_wrapper.models import Client, Expense, Project, Contact, User, Task, Time, Invoice, ProjectTeam, CustomField
 from api_wrapper.endpoints import _Client, _Expense, _Invoice, _Project, _Staff, _Task, _Time
 
 
@@ -50,7 +50,7 @@ class Update:
         def team(self, project_team : ProjectTeam):
             return self._project._team(project_id=project_team.project_id, project_team=project_team)
         
-        def custom_field(self, project_id : str, custom_fields : CustomFields):
+        def custom_field(self, project_id : str, custom_fields : list[CustomField]):
             return self._project._custom_fields(project_id=project_id, custom_fields=custom_fields)
 
 

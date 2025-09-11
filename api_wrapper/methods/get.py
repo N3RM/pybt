@@ -1,12 +1,14 @@
 from datetime import date
 
+from api_wrapper.models import PicklistFieldValueChoices
 from api_wrapper.endpoints import _Client, _Expense, _Invoice, _Payment, _Picklist, _Project, _Report, _Staff, _Task, _Time
 
 class Get:
     def __init__(self, api):
+        self._api = api
         self._method: callable = api._rest_adapter.get
         self.client = self._Get_Client(self._method)
-        self.expense = self._Get_Expense(self._method)
+        self.expense = self._Get_Expense(self._method, api)
         self.invoice = self._Get_Invoice(self._method)
         self.payment = self._Get_Payment(self._method)
         self.picklist = self._Get_Picklist(self._method)
@@ -23,20 +25,25 @@ class Get:
         def __call__(self, show_inactive : bool = False):
             return self._client(show_inactive=show_inactive)
 
-        def detail(self, client_id : str, view : str = None):
+        def detail(self, client_id : str, view : str = "Basic"):
             return self._client._detail(client_id=client_id, view=view)
         
 
     class _Get_Expense:
-        def __init__(self, method):
+        def __init__(self, method, api):
             self._expense = _Expense(method)
+            self._get_from_post = _Expense(api._rest_adapter.post)
 
         def detail(self, expense_id : str):
             return self._expense._detail(expense_id=expense_id)
         
-        def report(self, report_id : str = "0", staff_id : str = None, view : str = "Detailed"):
-            return self._expense._report(report_id=report_id, staff_id=staff_id, view=view)
+        def report(self, report_id : str = "0", staff_id : str = None, view : str = "Basic"):
+            # return self._get_from_post._report(report_id=report_id, staff_id=staff_id, view=view)
+            return "This endpoint does not work"
         
+        def report_by_filter(self, start_date : date = None, end_date : date = None, staff_ids : list[str] = None, project_ids : list[str] = None, view : str = "Basic", show_approval : bool = False):
+            return self._get_from_post._report_by_filter(start_date=start_date, end_date=end_date, staff_ids=staff_ids, project_ids=project_ids, view=view, show_approval=show_approval)
+
         def reports(self, staff_id : str = None, show_all : bool = False):
             return self._expense._reports(staff_id=staff_id, show_all=show_all)
 
@@ -82,8 +89,8 @@ class Get:
         def estimates_by_project(self, project_id : str, staff_sid : str = None, budget_type : str = None, show_inactive : bool = False):
             return self._picklist._estimates_by_project(project_id, staff_sid, budget_type, show_inactive)
         
-        def field_values(self, sid : str, show_inactive : bool = False):
-            return self._picklist._field_values(sid, show_inactive)
+        def field_value(self, field : PicklistFieldValueChoices, show_inactive : bool = False):
+            return self._picklist._field_values(field=field.value, show_inactive=show_inactive)
     
 
     class _Get_Project:
@@ -93,7 +100,7 @@ class Get:
         def __call__(self, show_inactive : bool = False):
             return self._project(show_inactive)
 
-        def detail(self, project_id : str, view : str = "Detailed", show_all_contacts : bool = False):
+        def detail(self, project_id : str, view : str = "Basic", show_all_contacts : bool = False):
             return self._project._detail(project_id, view, show_all_contacts)
         
         def contacts(self, project_id : str):
@@ -121,7 +128,7 @@ class Get:
         def __call__(self, show_inactive : bool = False):
             return self._staff(show_inactive=show_inactive)
         
-        def detail(self, staff_id : str, view : str = "Detailed"):
+        def detail(self, staff_id : str, view : str = "Basic"):
             return self._staff._detail(staff_id=staff_id, view=view)
 
 
@@ -129,7 +136,7 @@ class Get:
         def __init__(self, method):
             self._task = _Task(method)
 
-        def detail(self, task_id : str, view : str = None):
+        def detail(self, task_id : str, view : str = "Basic"):
             return self._task._detail(task_id=task_id, view=view)
         
         def list_by_project(self, project_id : str, show_completed : bool = False):
@@ -146,8 +153,8 @@ class Get:
         def __call__(self, time_id : str):
             return self._time(time_id=time_id)
         
-        def sheet(self, staff_id : str, start_date : date, end_date : date, view : str = "Detailed"):
+        def sheet(self, staff_id : str, start_date : date, end_date : date, view : str = "Basic"):
             return self._time._sheet(staff_id=staff_id, start_date=start_date, end_date=end_date, view=view)
         
-        def by_project(self, project_id : str, start_date : date, end_date : date, view : str = "Detailed", is_approved : bool = False):
+        def by_project(self, project_id : str, start_date : date, end_date : date, view : str = "Basic", is_approved : bool = False):
             return self._time._by_project(project_id=project_id, start_date=start_date, end_date=end_date, view=view, is_approved=is_approved)
