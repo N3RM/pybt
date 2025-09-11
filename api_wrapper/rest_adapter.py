@@ -1,6 +1,5 @@
 import requests
 from json import JSONDecodeError
-from typing import List, Dict
 from api_wrapper.exceptions import BigTimeAPIException
 from api_wrapper.models import Result
 

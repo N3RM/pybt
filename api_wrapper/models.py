@@ -1,25 +1,4 @@
 from datetime import date
-from enum import Enum
-
-class PicklistFieldValueChoices(Enum):
-    INVOICE_TYPE_SUBTOTAL = "InvoiceType_subttl"
-    RATE_TYPE_SIMPLE = "rateTypeSimple"
-    LOOKUP_STAFF_HOURLY_TYPE = "LookupStaffHourlyType"
-    LOOKUP_STAFF_TYPE = "LookupStaffType"
-    LOOKUP_CLIENT_TYPE = "LookupClientType"
-    LOOKUP_PROJECT_TYPE = "LookupProjectType"
-    LOOKUP_PROJECT_TEAM_ROLES = "LookupProjectTeamRoles"
-    LOOKUP_CONTACT_TYPE = "LookupContactType"
-    STAFF_ORG_LIST = "StaffOrgList"
-    STAFF_TEAM_LIST = "StaffTeamList"
-    CURRENCY_LIST = "CurrencyList"
-    SECURITY_GROUPS = "SecurityGroups"
-    PRODUCTION_STATUS = "StatusProduction"
-    BILLING_STATUS = "StatusBilling"
-    STAFF_STATUS = "StatusStaff"
-    EXPENSE_REPORT_STATUS = "StatusExpenseRpt"
-    INVOICE_TYPES = "InvoiceTypes"
-    INVOICE_POST_TYPES = "InvoicePostTypes"
 
 
 class Base:
@@ -618,6 +597,18 @@ class PicklistClient(PicklistIdName):
         **kwargs
     ):
         super().__init__(Id, Name, **kwargs)
+
+
+class PicklistStaff(PicklistIdName):
+    def __init__(
+        self,
+        Id: str = None,
+        Name: str = None,
+        IsInactive: bool = False,
+        **kwargs
+    ):
+        super().__init__(Id, Name, **kwargs)
+        self.active = not IsInactive
 
 
 class Time(Base):

@@ -1,6 +1,6 @@
 from datetime import date
 
-from api_wrapper.models import PicklistFieldValueChoices
+from api_wrapper.utils import PicklistFieldValueChoices
 from api_wrapper.endpoints import _Client, _Expense, _Invoice, _Payment, _Picklist, _Project, _Report, _Staff, _Task, _Time
 
 class Get:

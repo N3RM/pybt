@@ -1,4 +1,5 @@
-from api_wrapper.models import Result, PicklistProject, PicklistFieldValueChoices
+from api_wrapper.models import Result, PicklistProject, PicklistStaff, PicklistClient
+from api_wrapper.utils import PicklistFieldValueChoices
 
 class _Picklist:
     def __init__(self, method):
@@ -27,7 +28,7 @@ class _Picklist:
         if show_inactive:
             params["showinactive"] = "true"
         result: Result = self._method(endpoint=f"{self._endpoint}/Staff", params=params)
-        return result # modify to put data into model class before returning
+        return [PicklistStaff(**staff) for staff in result.data]
     
     def _all_tasks_by_project(self, project_sid : str, budget_type : str = None, filter_id : str = None, show_inactive : bool = False):
         params = {}
