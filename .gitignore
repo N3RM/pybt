@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 test.py
 test_results/*
+.idea/*
 
 # C extensions
 *.so
@@ -73,7 +74,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+pybt/docs/_build/
 
 # PyBuilder
 .pybuilder/
