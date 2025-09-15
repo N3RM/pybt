@@ -15,12 +15,7 @@ class Base:
 
 
 class Result(Base):
-    def __init__(
-        self,
-        status_code: int,
-        message: str = "",
-        data = None
-    ):
+    def __init__(self, status_code: int, message: str = "", data=None):
         self.status_code = str(status_code)
         self.message = str(message)
         self.data = data if data else None
@@ -30,17 +25,11 @@ class Result(Base):
 
 
 class CustomField(Base):
-    def __init__(
-        self,
-        Sid: str = None,
-        Name: str = None,
-        Value: str = None,
-        **kwargs
-    ):
+    def __init__(self, Sid: str = None, Name: str = None, Value: str = None, **kwargs):
         self.id: str = Sid
         self.name: str = Name
         self.value: str = Value
-        
+
 
 class Address(Base):
     def __init__(
@@ -50,14 +39,14 @@ class Address(Base):
         State: str = None,
         Zip: str = None,
         Country: str = None,
-        **kwargs
+        **kwargs,
     ):
         self.address = Address
         self.city = City
         self.state = State
         self.zip = Zip
         self.country = Country
-        
+
 
 class Contact(Base):
     def __init__(
@@ -82,18 +71,13 @@ class Contact(Base):
         self.company_name = CompanyNm
         self.email = EMail
         self.address = Address
-        
+
 
 class Client(Base):
-    def __init__(
-        self,
-        SystemId: str = None,
-        Nm: str = None,
-        **kwargs
-    ):
+    def __init__(self, SystemId: str = None, Nm: str = None, **kwargs):
         self.id = SystemId
         self.name = Nm
-        
+
 
 class Project(Base):
     def __init__(
@@ -156,7 +140,7 @@ class Project(Base):
         self.default_invoice_pdf_report_id = DefaultInvoicePdfRptSid
         self.default_invoice_terms_id = DefaultInvoiceTermSid
         self.custom_fields = UdfList
-                
+
 
 class ProjectCustomField(CustomField):
     def __init__(
@@ -165,22 +149,17 @@ class ProjectCustomField(CustomField):
         Sid: str = None,
         Name: str = None,
         Value: str = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(Sid, Name, Value)
         self.project_id = ProjectSid
-        
+
 
 class TaskAssignment(Base):
-    def __init__(
-        self,
-        StaffSid: str = None,
-        Nm: str = None,
-        **kwargs
-    ):
+    def __init__(self, StaffSid: str = None, Nm: str = None, **kwargs):
         self.staff_id = StaffSid
         self.name = Nm
-        
+
 
 class Task(Base):
     def __init__(
@@ -211,8 +190,8 @@ class Task(Base):
         IsSeriesMaster: bool = None,
         MasterTaskSid: str = None,
         ParentSid: str = None,
-        NoCharge: bool = None, 
-        **kwargs
+        NoCharge: bool = None,
+        **kwargs,
     ):
         self.id = TaskSid
         self.project_id = ProjectSid
@@ -241,7 +220,7 @@ class Task(Base):
         self.master_task_id = MasterTaskSid
         self.parent_id = ParentSid
         self.no_charge = NoCharge
-        
+
 
 class TaskBudgetData(Base):
     def __init__(
@@ -254,7 +233,7 @@ class TaskBudgetData(Base):
         ExpensesInput: str = None,
         ExpensesBillable: str = None,
         TotalWip: str = None,
-        **kwargs
+        **kwargs,
     ):
         self.task_id = TaskSid
         self.input_hours = HoursInput
@@ -264,18 +243,15 @@ class TaskBudgetData(Base):
         self.input_expenses = ExpensesInput
         self.billable_expenses = ExpensesBillable
         self.total_work_in_progress = TotalWip
-        
+
 
 class ProjectBudget(Base):
     def __init__(
-        self,
-        ProjectSid: str = None,
-        TaskBudgets: list[TaskBudgetData] = None,
-        **kwargs
+        self, ProjectSid: str = None, TaskBudgets: list[TaskBudgetData] = None, **kwargs
     ):
         self.project_id = ProjectSid
         self.task_budgets = TaskBudgets
-        
+
 
 class LineItem(Base):
     def __init__(
@@ -304,13 +280,13 @@ class LineItem(Base):
         SalesTaxAmt: str = None,
         SalesTaxNm: str = None,
         Source: str = None,
-        **kwargs
+        **kwargs,
     ):
         self.line_number = LineNbr
         self.name = Nm
-        self.nt = Nt # TODO Figure out what this is
-        self.account_id = AcctSid # TODO Figure out what this is
-        self.budget_percent = BudgetPer # TODO Figure out what this is
+        self.nt = Nt  # TODO Figure out what this is
+        self.account_id = AcctSid  # TODO Figure out what this is
+        self.budget_percent = BudgetPer  # TODO Figure out what this is
         self.is_credit = IsCredit
         self.is_non_time_charge = IsNonTimeCharge
         self.is_taxable = IsTaxable
@@ -324,13 +300,13 @@ class LineItem(Base):
         self.is_deleted = IsDeleted
         self.account_name = AcctSidNm
         self.invoice_id = InvoiceSid
-        self.type = LineType # TODO Figure out what this is
+        self.type = LineType  # TODO Figure out what this is
         self.project_id = ProjectSid
         self.qb_class_name = QBClassNm
         self.sales_tax_amount = SalesTaxAmt
         self.sales_tax_name = SalesTaxNm
-        self.source = Source # TODO Figure out what this is
-        
+        self.source = Source  # TODO Figure out what this is
+
 
 class Invoice(Base):
     def __init__(
@@ -366,7 +342,7 @@ class Invoice(Base):
         BillingAddress: Address = None,
         FirmAddress: Address = None,
         Lines: list[LineItem] = None,
-        **kwargs
+        **kwargs,
     ):
         self.id = Sid
         self.client_id = ClientSid
@@ -399,18 +375,13 @@ class Invoice(Base):
         self.billing_address = BillingAddress
         self.firm_address = FirmAddress
         self.lines = Lines
-        
+
 
 class Report(Base):
-    def __init__(
-        self,
-        Data: list[dict] = None,
-        FieldList: list[dict] = None,
-        **kwargs
-    ):
+    def __init__(self, Data: list[dict] = None, FieldList: list[dict] = None, **kwargs):
         self.data = Data
         self.field_list = FieldList
-        
+
 
 class User(Base):
     def __init__(
@@ -419,28 +390,28 @@ class User(Base):
         FName: str = None,
         SName: str = None,
         Email: str = None,
-        **kwargs
+        **kwargs,
     ):
         self.id = StaffSid
         self.first_name = FName
         self.last_name = SName
         self.email = Email
-        
+
 
 class Rate(Base):
     def __init__(
         self,
         ProjectSid: str = None,
         RateValue: str = None,
-        StaffSid = None,
-        TaskSid = None,
-        **kwargs
+        StaffSid=None,
+        TaskSid=None,
+        **kwargs,
     ):
         self.project_id = ProjectSid
         self.staff_id = StaffSid
         self.task_id = TaskSid
         self.value = RateValue
-        
+
 
 class ProjectTeamMember(Base):
     def __init__(
@@ -448,18 +419,18 @@ class ProjectTeamMember(Base):
         StaffSid: str = None,
         ContactRole: str = None,
         TeamLead: bool = False,
-        **kwargs
+        **kwargs,
     ):
         self.staff_id = StaffSid
         self.role = ContactRole
         self.team_lead = TeamLead
-        
+
 
 class ProjectTeam(Base):
     def __init__(
-            self,
-            team_members: list[ProjectTeamMember],
-            project_id: str,
+        self,
+        team_members: list[ProjectTeamMember],
+        project_id: str,
     ):
         self.team_members = team_members
         self.project_id = project_id
@@ -504,9 +475,9 @@ class Expense(Base):
         ApprovalStatusNm: str = None,
         InvoiceSid: str = None,
         IsInvoiced: bool = None,
-        IsVenderExpense: bool = None,
-        ExpenseReceipt = None,
-        **kwargs
+        IsVendorExpense: bool = None,
+        ExpenseReceipt=None,
+        **kwargs,
     ):
         self.id = SID
         self.is_submitted = IsSubmitted
@@ -544,9 +515,9 @@ class Expense(Base):
         self.approval_status = ApprovalStatusNm
         self.invoice_id = InvoiceSid
         self.is_invoiced = IsInvoiced
-        self.is_vendor_expense = IsVenderExpense
+        self.is_vendor_expense = IsVendorExpense
         self.expense_receipt = ExpenseReceipt
-        
+
 
 class ExpenseReport(Base):
     def __init__(
@@ -557,7 +528,7 @@ class ExpenseReport(Base):
         SubmitDt: str = None,
         StatusId: str = None,
         StatusNm: str = None,
-        **kwargs
+        **kwargs,
     ):
         self.id = SID
         self.report_name = RptNm
@@ -565,47 +536,28 @@ class ExpenseReport(Base):
         self.date_submitted = SubmitDt
         self.status_id = StatusId
         self.status = StatusNm
-        
+
 
 class PicklistIdName(Base):
-    def __init__(
-        self,
-        Id: str = None,
-        Name: str = None,
-        **kwargs
-    ):
+    def __init__(self, Id: str = None, Name: str = None, **kwargs):
         self.id = Id
         self.name = Name
-        
+
 
 class PicklistProject(PicklistIdName):
-    def __init__(
-        self,
-        Id: str = None,
-        Name: str = None,
-        Group: str = None,
-        **kwargs
-    ):
+    def __init__(self, Id: str = None, Name: str = None, Group: str = None, **kwargs):
         super().__init__(Id, Name, **kwargs)
         self.group = Group
 
+
 class PicklistClient(PicklistIdName):
-    def __init__(
-        self,
-        Id : str = None,
-        Name : str = None,
-        **kwargs
-    ):
+    def __init__(self, Id: str = None, Name: str = None, **kwargs):
         super().__init__(Id, Name, **kwargs)
 
 
 class PicklistStaff(PicklistIdName):
     def __init__(
-        self,
-        Id: str = None,
-        Name: str = None,
-        IsInactive: bool = False,
-        **kwargs
+        self, Id: str = None, Name: str = None, IsInactive: bool = False, **kwargs
     ):
         super().__init__(Id, Name, **kwargs)
         self.active = not IsInactive
@@ -623,18 +575,18 @@ class Time(Base):
         Notes: str = None,
         HoursBillable: str = None,
         ChargeBillable: str = None,
-        IsNew = None,
-        ProjectNm = None,
-        ClientId = None,
-        ClientNm = None,
-        SourceNm = None,
-        TaskNm = None,
-        RevisionNotes = None,
-        NoCharge = None,
-        IsApproved = None,
-        InvoiceSID = None,
-        IsInvoiced = None,
-        BillRate = None,
+        IsNew=None,
+        ProjectNm=None,
+        ClientId=None,
+        ClientNm=None,
+        SourceNm=None,
+        TaskNm=None,
+        RevisionNotes=None,
+        NoCharge=None,
+        IsApproved=None,
+        InvoiceSID=None,
+        IsInvoiced=None,
+        BillRate=None,
         **kwargs,
     ):
         self.id = SID
@@ -658,7 +610,7 @@ class Time(Base):
         self.billable_hours = HoursBillable
         self.billing_rate = BillRate
         self.billable_charges = ChargeBillable
-        
+
 
 class Timesheet(Base):
     def __init__(
@@ -666,15 +618,15 @@ class Timesheet(Base):
         start_date: str = None,
         end_date: str = None,
         time_entries: list[Time] = None,
-        **kwargs
+        **kwargs,
     ):
         self.start_date = start_date
         self.end_date = end_date
         self.time_entries = time_entries
-        
+
     def __repr__(self):
         timelist = []
-        for time in self.timesheet:
+        for time in self.time_entries:
             timelist.append(
                 {
                     key: value
@@ -688,25 +640,15 @@ class Timesheet(Base):
 
 
 class ProjectTimesheet(Base):
-    def __init__(
-        self,
-        projectSID: str = None,
-        timesheet: Timesheet = None,
-        **kwargs
-    ):
+    def __init__(self, projectSID: str = None, timesheet: Timesheet = None, **kwargs):
         self.timesheet = timesheet
         self.project_id = projectSID
-        
+
 
 class StaffTimesheet(Base):
-    def __init__(
-        self,
-        staffSID: str = None,
-        timesheet: Timesheet = None,
-        **kwargs
-    ):
+    def __init__(self, staffSID: str = None, timesheet: Timesheet = None, **kwargs):
         self.timesheet = timesheet
         self.staff_id = staffSID
-        
+
 
 class Ticket: ...

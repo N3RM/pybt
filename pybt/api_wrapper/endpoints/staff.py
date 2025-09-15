@@ -1,22 +1,34 @@
-from api_wrapper.models import Result, User
+from pybt.api_wrapper import models
 
-class _Staff:
+
+class Staff:
     def __init__(self, method):
         self._endpoint = "Staff"
         self._method = method
 
-    def __call__(self, show_inactive : bool = False) -> list[User]:
+    def __call__(self, show_inactive: bool = False) -> list[models.User]:
         params = {}
         if show_inactive:
             params["show_inactive"] = "true"
-        result: Result = self._method(endpoint=f"{self._endpoint}", params=params)
-        return [User(**staff) for staff in result.data]
+        result: models.Result = self._method(
+            endpoint=f"{self._endpoint}", params=params
+        )
+        return [models.User(**staff) for staff in result.data]
 
-    def _detail(self, staff_id : str = None, view : str = None, staff : User = None) -> User | Result:
+    def detail(
+        self, staff_id: str = None, view: str = None, staff: models.User = None
+    ) -> models.User | models.Result:
         params = {}
         if view:
             params["view"] = view
         if staff:
             params = {**staff}
-        result: Result = self._method(endpoint=f"{self._endpoint}/Detail/{staff_id}" if staff_id else f"{self._endpoint}/Detail", params=params)
-        return User(**result.data) if result.data else f"{result.status_code}: {result.message}"
+        result: models.Result = self._method(
+            endpoint=(
+                f"{self._endpoint}/Detail/{staff_id}"
+                if staff_id
+                else f"{self._endpoint}/Detail"
+            ),
+            params=params,
+        )
+        return models.User(**result.data) if result.data else result

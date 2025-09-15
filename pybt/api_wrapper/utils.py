@@ -1,21 +1,23 @@
-from enum import Enum
-from datetime import date
-
 import calendar
+from datetime import date
+from enum import Enum, EnumMeta
 
-def get_month_start_date(month : int, year : int) -> date:
+
+def get_month_start_date(month: int, year: int) -> date:
     return date(year, month, 1)
 
-def get_month_end_date(month : int = None, year : int = None) -> date:
-    return date(year, month, 1).replace(
-        day=calendar.monthrange(year, month)[1]
-    )
+
+def get_month_end_date(month: int = None, year: int = None) -> date:
+    return date(year, month, 1).replace(day=calendar.monthrange(year, month)[1])
+
 
 def get_this_month_start_date() -> date:
     return get_month_start_date(month=date.today().month, year=date.today().year)
 
+
 def get_this_month_end_date() -> date:
     return get_month_end_date(month=date.today().month, year=date.today().year)
+
 
 def get_last_month_start_date() -> date:
     month = date.today().month
@@ -27,6 +29,7 @@ def get_last_month_start_date() -> date:
 
     return get_month_start_date(month=last_month, year=year)
 
+
 def get_last_month_end_date() -> date:
     month = date.today().month
     year = date.today().year
@@ -37,11 +40,21 @@ def get_last_month_end_date() -> date:
 
     return get_month_end_date(month=last_month, year=year)
 
+
 def format_bigtime_date(dt: date) -> str:
     return dt.strftime("%Y-%m-%d")
 
 
-class PicklistFieldValueChoices(Enum):
+class MetaEnum(EnumMeta):
+    def __contains__(cls, item):
+        try:
+            cls(item)
+        except ValueError:
+            return False
+        return True
+
+
+class PicklistFieldValueChoices(Enum, metaclass=MetaEnum):
     INVOICE_TYPE_SUBTOTAL = "InvoiceType_subttl"
     RATE_TYPE_SIMPLE = "rateTypeSimple"
     LOOKUP_STAFF_HOURLY_TYPE = "LookupStaffHourlyType"
@@ -62,6 +75,6 @@ class PicklistFieldValueChoices(Enum):
     INVOICE_POST_TYPES = "InvoicePostTypes"
 
 
-class ViewChoices(Enum):
+class ViewChoices(Enum, metaclass=MetaEnum):
     BASIC = "Basic"
     DETAILED = "Detailed"

@@ -1,9 +1,11 @@
-import requests
 from json import JSONDecodeError
-from api_wrapper.exceptions import BigTimeAPIException
-from api_wrapper.models import Result
 
+import requests
 import urllib3
+
+from pybt.api_wrapper import models
+from pybt.api_wrapper.exceptions import BigTimeAPIException
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -22,8 +24,8 @@ class RestAdapter:
         self._ssl_verify = ssl_verify
 
     def _do(
-        self, http_method: str, endpoint: str, ep_params = None, data = None
-    ) -> Result:
+        self, http_method: str, endpoint: str, ep_params=None, data=None
+    ) -> models.Result:
         full_url = self.url + endpoint
         headers = {"X-auth-ApiToken": self._api_key, "X-auth-realm": self._firm}
         try:
@@ -42,19 +44,20 @@ class RestAdapter:
                 data_out = response.json()
             except (ValueError, JSONDecodeError) as e:
                 raise BigTimeAPIException("Bad JSON in response", response) from e
-            return Result(response.status_code, message=response.reason, data=data_out)
+            return models.Result(
+                response.status_code, message=response.reason, data=data_out
+            )
         raise BigTimeAPIException(f"{response.status_code}: {response.reason}")
-        
 
-    def get(self, endpoint: str, params = None) -> Result:
+    def get(self, endpoint: str, params=None) -> models.Result:
         return self._do(http_method="GET", endpoint=endpoint, ep_params=params)
 
-    def post(self, endpoint: str, params = None, data = None) -> Result:
+    def post(self, endpoint: str, params=None, data=None) -> models.Result:
         return self._do(
             http_method="POST", endpoint=endpoint, ep_params=params, data=data
         )
 
-    def delete(self, endpoint: str, params = None, data = None) -> Result:
+    def delete(self, endpoint: str, params=None, data=None) -> models.Result:
         return self._do(
             http_method="DELETE", endpoint=endpoint, ep_params=params, data=data
         )

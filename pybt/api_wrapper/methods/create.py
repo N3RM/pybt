@@ -1,71 +1,75 @@
-from api_wrapper.models import Client, Expense, Project, Contact, User, Task, Time
-from api_wrapper.endpoints import _Client, _Expense, _Invoice, _Project, _Staff, _Task, _Time
+from pybt.api_wrapper import models
+from pybt.api_wrapper.endpoints import (
+    Client,
+    Expense,
+    Invoice,
+    Project,
+    Staff,
+    Task,
+    Time,
+)
+
 
 class Create:
-    def __init__(self, api):
-        self._method: callable = api._rest_adapter.get
-        self.client = self._Create_Client(self._method)
-        self.expense = self._Create_Expense(self._method)
-        self.invoice = self._Create_Invoice(self._method)
-        self.project = self._Create_Project(self._method)
-        self.staff = self._Create_Staff(self._method)
-        self.task = self._Create_Task(self._method)
-        self.time = self._Create_Time(self._method)
+    def __init__(self, rest_adapter):
+        self.client = self._CreateClient(rest_adapter)
+        self.expense = self._CreateExpense(rest_adapter)
+        self.invoice = self._CreateInvoice(rest_adapter)
+        self.project = self._CreateProject(rest_adapter)
+        self.staff = self._CreateStaff(rest_adapter)
+        self.task = self._CreateTask(rest_adapter)
+        self.time = self._CreateTime(rest_adapter)
 
-    class _Create_Client:
-        def __init__(self, method):
-            self._client = _Client(method)
+    class _CreateClient:
+        def __init__(self, rest_adapter):
+            self._client = Client(rest_adapter.post)
 
-        def detail(self, client : Client):
-            return self._client._detail(client=client)
-        
+        def detail(self, client: models.Client):
+            return self._client.detail(client=client)
 
-    class _Create_Expense:
-        def __init__(self, method):
-            self._expense = _Expense(method)
+    class _CreateExpense:
+        def __init__(self, rest_adapter):
+            self._expense = Expense(rest_adapter.post)
 
-        def detail(self, expense : Expense):
-            return self._expense._detail(expense=expense)
+        def detail(self, expense: models.Expense):
+            return self._expense.detail(expense=expense)
 
+    class _CreateInvoice:
+        def __init__(self, rest_adapter):
+            self._invoice = Invoice(rest_adapter.post)
 
-    class _Create_Invoice:
-        def __init__(self, method):
-            self._invoice = _Invoice(method)
+        def create(self, project_id: str, calculator_id: str):
+            return self._invoice.create(
+                project_id=project_id, calculator_id=calculator_id
+            )
 
-        def create(self, project_id : str, calculator_id : str):
-            return self._invoice._create(project_id=project_id, calculator_id=calculator_id)
-    
+    class _CreateProject:
+        def __init__(self, rest_adapter):
+            self._project = Project(rest_adapter.post)
 
-    class _Create_Project:
-        def __init__(self, method):
-            self._project = _Project(method)
+        def detail(self, project: models.Project):
+            return self._project.detail(project=project)
 
-        def detail(self, project : Project):
-            return self._project._detail(project=project)
-        
-        def contact(self, contact : Contact):
-            return self._project._contact(contact=contact)
+        def contact(self, contact: models.Contact):
+            return self._project.contact(contact=contact)
 
+    class _CreateStaff:
+        def __init__(self, rest_adapter):
+            self._staff = Staff(rest_adapter.post)
 
-    class _Create_Staff:
-        def __init__(self, method):
-            self._staff = _Staff(method)
-        
-        def detail(self, staff : User):
-            return self._staff._detail(staff=staff)
+        def detail(self, staff: models.User):
+            return self._staff.detail(staff=staff)
 
+    class _CreateTask:
+        def __init__(self, rest_adapter):
+            self._task = Task(rest_adapter.post)
 
-    class _Create_Task:
-        def __init__(self, method):
-            self._task = _Task(method)
+        def detail(self, task: models.Task):
+            return self._task.detail(task=task)
 
-        def detail(self, task : Task):
-            return self._task._detail(task=task)
+    class _CreateTime:
+        def __init__(self, rest_adapter):
+            self._time = Time(rest_adapter.post)
 
-
-    class _Create_Time:
-        def __init__(self, method):
-            self._time = _Time(method)
-
-        def __call__(self, time : Time, mark_submitted : bool = False):
+        def __call__(self, time: models.Time, mark_submitted: bool = False):
             return self._time(time=time, mark_submitted=mark_submitted)
