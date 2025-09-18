@@ -7,12 +7,12 @@ requires = [
 build-backend = "hatchling.build"
 
 [project]
-name = "pybt"
-version = "0.0.1"
+name = "bigtime-api-python"
+version = "0.0.2"
 authors = [
     { name = "Noel Moyer III", email = "moyer.noel@gmail.com" }
 ]
-description = "pybt is an API wrapper for the BigTime API"
+description = "bigtime-api-python is an API wrapper for the BigTime API"
 readme = "README.md"
 requires-python = ">=3.13"
 classifiers = [
@@ -28,8 +28,8 @@ license-files = ["LICEN[CS]E*"]
 keywords = ["BigTime", "API Wrapper"]
 
 [project.urls]
-Homepage = "https://github.com/N3RM/pybt"
-Issues = "https://github.com/N3RM/pybt/issues"
+Homepage = "https://github.com/N3RM/bigtime-api-python"
+Issues = "https://github.com/N3RM/bigtime-api-python/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pybt/api_wrapper"]
