@@ -39,7 +39,7 @@ class Get:
 
     class _GetExpense:
         def __init__(self, rest_adapter):
-            self._expense = Expense(rest_adapter)
+            self._expense = Expense(rest_adapter.get)
             self._get_from_post = Expense(rest_adapter.post)
 
         def detail(self, expense_id: str):
@@ -74,7 +74,7 @@ class Get:
 
     class _GetInvoice:
         def __init__(self, rest_adapter):
-            self._invoice = Invoice(rest_adapter)
+            self._invoice = Invoice(rest_adapter.get)
 
         def history(self, start_date: date, end_date: date):
             return self._invoice.history(start_date=start_date, end_date=end_date)
@@ -99,7 +99,7 @@ class Get:
 
     class _GetPicklist:
         def __init__(self, rest_adapter):
-            self._picklist = Picklist(rest_adapter)
+            self._picklist = Picklist(rest_adapter.get)
 
         def projects(self, staff_sid: str = None):
             return self._picklist.projects(staff_sid=staff_sid)
@@ -137,7 +137,7 @@ class Get:
 
     class _GetProject:
         def __init__(self, rest_adapter):
-            self._project = Project(rest_adapter)
+            self._project = Project(rest_adapter.get)
 
         def __call__(self, show_inactive: bool = False):
             return self._project(show_inactive)
@@ -158,14 +158,14 @@ class Get:
 
     class _GetReport:
         def __init__(self, rest_adapter):
-            self._report = Report(rest_adapter)
+            self._report = Report(rest_adapter.get)
 
         def __call__(self, report_id):
             return self._report.data(report_id=report_id)
 
     class _GetStaff:
         def __init__(self, rest_adapter):
-            self._staff = Staff(rest_adapter)
+            self._staff = Staff(rest_adapter.get)
 
         def __call__(self, show_inactive: bool = False):
             return self._staff(show_inactive=show_inactive)
@@ -175,7 +175,7 @@ class Get:
 
     class _GetTask:
         def __init__(self, rest_adapter):
-            self._task = Task(rest_adapter)
+            self._task = Task(rest_adapter.get)
 
         def detail(self, task_id: str, view: str = "Basic"):
             return self._task.detail(task_id=task_id, view=view)
@@ -190,7 +190,7 @@ class Get:
 
     class _GetTime:
         def __init__(self, rest_adapter):
-            self._time = Time(rest_adapter)
+            self._time = Time(rest_adapter.get)
 
         def __call__(self, time_id: str):
             return self._time(time_id=time_id)

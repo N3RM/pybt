@@ -9,6 +9,9 @@ class Invoice:
         self._endpoint = "Invoice"
         self._method = method
 
+    def __call__(self, project_id: str, calculator_id: str) -> models.Invoice:
+        return self.create(project_id=project_id, calculator_id=calculator_id)
+
     def detail(
         self, invoice_id: str = None, invoice: models.Invoice = None
     ) -> models.Invoice | models.Result:

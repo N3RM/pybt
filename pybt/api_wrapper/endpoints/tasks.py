@@ -35,7 +35,9 @@ class Task:
         )
         return [models.Task(**task) for task in result.data]
 
-    def budget_status_by_project(self, project_id: str = None):
+    def budget_status_by_project(
+        self, project_id: str = None
+    ) -> list[models.TaskBudgetData]:
         params = {}
 
         result: models.Result = self._method(

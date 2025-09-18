@@ -1,5 +1,7 @@
 from datetime import date
 
+from pybt.api_wrapper.exceptions import BigTimeAPIException
+
 
 class Base:
     def __repr__(self):
@@ -13,9 +15,31 @@ class Base:
             }
         )
 
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
+    def keys(self):
+        key_list = [
+            key
+            for key, value in self.__dict__.items()
+            if not key.startswith("__")
+            and not callable(value)
+            and not callable(getattr(value, "__get__", None))
+            and value
+        ]
+        return key_list
+
 
 class Result(Base):
-    def __init__(self, status_code: int, message: str = "", data=None):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
+    def __init__(self, status_code: int, message: str = "", data: dict | list = None):
         self.status_code = str(status_code)
         self.message = str(message)
         self.data = data if data else None
@@ -25,6 +49,14 @@ class Result(Base):
 
 
 class CustomField(Base):
+    """Holds information about a custom field in BigTime
+
+    Attributes:
+        id: the BigTime ID of the field
+        name: the name of the field
+        value: the value assigned to the field
+    """
+
     def __init__(self, Sid: str = None, Name: str = None, Value: str = None, **kwargs):
         self.id: str = Sid
         self.name: str = Name
@@ -32,6 +64,16 @@ class CustomField(Base):
 
 
 class Address(Base):
+    """Holds address information
+
+    Attributes:
+        address: the street address (123 Main Street)
+        city: the city
+        state: the state (can be 2 letter abbreviation or full name)
+        zip: the 5-digit zip code
+        country: the country
+    """
+
     def __init__(
         self,
         Address: str = None,
@@ -49,6 +91,20 @@ class Address(Base):
 
 
 class Contact(Base):
+    """Holds information about a BigTime contact
+
+    Attributes:
+        id: the BigTime ID of the contact
+        tag: (PRIMARY|BILLING|OTHER) tag assigned to the contact
+        project_id: the project ID that the contact is attached to
+        client_id: the client ID that the contact is attached to
+        first_name: first name of the contact
+        last_name: last name of the contact
+        company_name: company name of the contact
+        email: email address of the contact
+        address: Address object to hold the contact's address
+    """
+
     def __init__(
         self,
         SystemId: str = None,
@@ -74,12 +130,52 @@ class Contact(Base):
 
 
 class Client(Base):
+    """Holds information about a BigTime client
+
+    Attributes:
+        id: the BigTime ID of the client
+        name: the name of the client
+    """
+
     def __init__(self, SystemId: str = None, Nm: str = None, **kwargs):
         self.id = SystemId
         self.name = Nm
 
 
 class Project(Base):
+    """Holds information about a BigTime project
+
+    Attributes:
+        id: the BigTime ID of the project
+        name: the project name
+        project_code: the user-changeable project ID
+        type_id: the ID of the project's type
+        start_date: the start date of the project
+        end_date: the end date of the project (optional)
+        production_status_id: the ID of the production status
+        production_status_note: the production status note
+        billing_status_id: the ID of the billing status
+        notes: the project notes field
+        is_all_staff: True if all staff can bill to the project
+        is_no_charge: True if all time and expenses are non-billable
+        invoice_type_id: the default invoice type
+        invoice_totals_id: the default invoice totals
+        contract_notes: special invoicing instructions
+        invoice_notes: notes to be included on every invoice generated
+        billing_rate: the billing rate type used for the project
+        basic_rate: if the project uses flat rate, this is the amount of the flat rate
+        qb_customer_id: the ID of the client in QuickBooks
+        client_id: the ID of the client that this project belongs to
+        billing_contact_id: the ID of the billing contact for the project
+        contact_list: a list of contacts for the project
+        address_list: a list of addresses associated with the project
+        client: a Client object
+        default_invoice_type_id: the ID of the default invoice type (T&M, fixed, etc)
+        default_invoice_pdf_report_id: the ID of the default invoice PDF
+        default_invoice_terms_id: the ID of the default invoice terms (Net 30, Net 60, etc)
+        custom_fields: a list of the custom fields for the project
+    """
+
     def __init__(
         self,
         SystemId: str = None,
@@ -92,14 +188,14 @@ class Project(Base):
         StatusProd_nt: str = None,
         StatusBill: str = None,
         Notes: str = None,
-        IsAllStaff: bool = None,
-        IsNoCharge: bool = None,
+        IsAllStaff: bool = False,
+        IsNoCharge: bool = False,
         InvoiceType: str = None,
         InvoiceTotals: str = None,
         ContractNotes: str = None,
         InvoiceNotes: str = None,
         BillingRate: str = None,
-        BasicRate: str = None,
+        BasicRate: float = None,
         QBCustomerId: str = None,
         ClientId: str = None,
         BillingContactId: str = None,
@@ -143,6 +239,15 @@ class Project(Base):
 
 
 class ProjectCustomField(CustomField):
+    """Holds information about a custom field of a project
+
+    Attributes:
+        project_id: the ID of the project
+        id: the ID of the custom field
+        name: the name of the custom field
+        value: the value of the custom field
+    """
+
     def __init__(
         self,
         ProjectSid: str = None,
@@ -156,12 +261,28 @@ class ProjectCustomField(CustomField):
 
 
 class TaskAssignment(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(self, StaffSid: str = None, Nm: str = None, **kwargs):
         self.staff_id = StaffSid
         self.name = Nm
 
 
 class Task(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         TaskSid: str = None,
@@ -180,17 +301,17 @@ class Task(Base):
         DueDt: str = None,
         StartDt: str = None,
         FeeOrExpense: str = None,
-        BudgetHours: str = None,
-        BudgetFees: str = None,
-        BudgetExps: str = None,
-        BudgetTotal: str = None,
+        BudgetHours: float = None,
+        BudgetFees: float = None,
+        BudgetExps: float = None,
+        BudgetTotal: float = None,
         PerComp: str = None,
-        IsArchived: bool = None,
+        IsArchived: bool = False,
         DefaultQBClass: str = None,
-        IsSeriesMaster: bool = None,
+        IsSeriesMaster: bool = False,
         MasterTaskSid: str = None,
         ParentSid: str = None,
-        NoCharge: bool = None,
+        NoCharge: bool = False,
         **kwargs,
     ):
         self.id = TaskSid
@@ -209,10 +330,10 @@ class Task(Base):
         self.due_date = DueDt
         self.start_date = StartDt
         self.fee_or_expense = FeeOrExpense
-        self.budget_hours = BudgetHours
-        self.budget_fees = BudgetFees
-        self.budget_expenses = BudgetExps
-        self.budget_total = BudgetTotal
+        self.estimate_hours = BudgetHours
+        self.estimate_fees = BudgetFees
+        self.estimate_expenses = BudgetExps
+        self.estimate_total = BudgetTotal
         self.percent_complete = PerComp
         self.is_archived = IsArchived
         self.default_qb_class = DefaultQBClass
@@ -223,16 +344,24 @@ class Task(Base):
 
 
 class TaskBudgetData(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         TaskSid: str = None,
-        HoursInput: str = None,
-        HoursBill: str = None,
-        FeesInput: str = None,
-        FeesCost: str = None,
-        ExpensesInput: str = None,
-        ExpensesBillable: str = None,
-        TotalWip: str = None,
+        HoursInput: float = None,
+        HoursBill: float = None,
+        FeesInput: float = None,
+        FeesCost: float = None,
+        ExpensesInput: float = None,
+        ExpensesBillable: float = None,
+        TotalWip: float = None,
         **kwargs,
     ):
         self.task_id = TaskSid
@@ -245,15 +374,89 @@ class TaskBudgetData(Base):
         self.total_work_in_progress = TotalWip
 
 
-class ProjectBudget(Base):
+class ProjectBudgetStatus(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
-        self, ProjectSid: str = None, TaskBudgets: list[TaskBudgetData] = None, **kwargs
+        self,
+        project: Project,
+        task_budget_list: list[TaskBudgetData],
+        task_list: list[Task],
+        **kwargs,
     ):
-        self.project_id = ProjectSid
-        self.task_budgets = TaskBudgets
+        self.project = project
+        if project.basic_rate is None:
+            raise BigTimeAPIException(
+                "The Project object's 'basic_rate' must not be None"
+            )
+        self.task_budget_list = task_budget_list
+        self.task_list = task_list
+
+        self.estimate_hours = 0
+        self.estimate_expenses = 0
+
+        for task in self.task_list:
+            self.estimate_hours += task.estimate_hours
+            self.estimate_expenses += task.estimate_expenses
+
+        self.input_hours = 0
+        self.billable_hours = 0
+        self.input_expenses = 0
+        self.billable_expenses = 0
+        self.total_work_in_progress = 0
+
+        for task in self.task_budget_list:
+            self.input_hours += task.input_hours
+            self.billable_hours += task.billable_hours
+            self.input_expenses += task.input_expenses
+            self.billable_expenses += task.billable_expenses
+            self.total_work_in_progress += task.total_work_in_progress
+
+        self.estimate_fees = self.estimate_hours * self.project.basic_rate
+        self.estimate_total = self.estimate_fees + self.estimate_expenses
+
+        self.input_fees = self.input_hours * self.project.basic_rate
+        self.billable_fees = self.billable_hours * self.project.basic_rate
+        self.input_total = self.input_fees + self.input_expenses
+        self.billable_total = self.billable_fees + self.billable_expenses
+
+        self.hours_percent_complete = (
+            (self.billable_hours / self.estimate_hours) * 100
+            if self.estimate_hours
+            else -1
+        )
+        self.fees_percent_complete = (
+            (self.billable_fees / self.estimate_fees) * 100
+            if self.estimate_fees
+            else -1
+        )
+        self.expenses_percent_complete = (
+            (self.billable_expenses / self.estimate_expenses) * 100
+            if self.estimate_expenses
+            else -1
+        )
+        self.total_percent_complete = (
+            (self.billable_total / self.estimate_total) * 100
+            if self.estimate_total
+            else -1
+        )
 
 
 class LineItem(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         LineNbr: str = None,
@@ -261,9 +464,9 @@ class LineItem(Base):
         Nt: str = None,
         AcctSid: str = None,
         BudgetPer: str = None,
-        IsCredit: bool = None,
-        IsNonTimeCharge: bool = None,
-        IsTaxable: bool = None,
+        IsCredit: bool = False,
+        IsNonTimeCharge: bool = False,
+        IsTaxable: bool = False,
         QBClassSid: str = None,
         Quantity: str = None,
         Rate: str = None,
@@ -271,7 +474,7 @@ class LineItem(Base):
         SalesTaxSid: str = None,
         SubTotalSid: str = None,
         UpdatedLineNbr: str = None,
-        IsDeleted: bool = None,
+        IsDeleted: bool = False,
         AcctSidNm: str = None,
         InvoiceSid: str = None,
         LineType: str = None,
@@ -284,7 +487,7 @@ class LineItem(Base):
     ):
         self.line_number = LineNbr
         self.name = Nm
-        self.nt = Nt  # TODO Figure out what this is
+        self.nt = Nt
         self.account_id = AcctSid  # TODO Figure out what this is
         self.budget_percent = BudgetPer  # TODO Figure out what this is
         self.is_credit = IsCredit
@@ -309,6 +512,14 @@ class LineItem(Base):
 
 
 class Invoice(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         Sid: str = None,
@@ -318,7 +529,7 @@ class Invoice(Base):
         DName: str = None,
         BillingContactId: str = None,
         Calculator: str = None,
-        CanEditInvoice: bool = None,
+        CanEditInvoice: bool = False,
         InvoiceNbr: str = None,
         InvoiceDt: str = None,
         InvoiceAmt: str = None,
@@ -378,12 +589,28 @@ class Invoice(Base):
 
 
 class Report(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(self, Data: list[dict] = None, FieldList: list[dict] = None, **kwargs):
         self.data = Data
         self.field_list = FieldList
 
 
 class User(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         StaffSid: str = None,
@@ -399,12 +626,20 @@ class User(Base):
 
 
 class Rate(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         ProjectSid: str = None,
         RateValue: str = None,
-        StaffSid=None,
-        TaskSid=None,
+        StaffSid: str = None,
+        TaskSid: str = None,
         **kwargs,
     ):
         self.project_id = ProjectSid
@@ -414,6 +649,14 @@ class Rate(Base):
 
 
 class ProjectTeamMember(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         StaffSid: str = None,
@@ -427,6 +670,14 @@ class ProjectTeamMember(Base):
 
 
 class ProjectTeam(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         team_members: list[ProjectTeamMember],
@@ -437,10 +688,18 @@ class ProjectTeam(Base):
 
 
 class Expense(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         SID: str = None,
-        IsSubmitted: bool = None,
+        IsSubmitted: bool = False,
         RptSID: str = None,
         StaffSID: str = None,
         Dt: str = None,
@@ -456,26 +715,26 @@ class Expense(Base):
         VendorNm: str = None,
         CCardSid: str = None,
         BillSid: str = None,
-        NoCharge: bool = None,
-        PaidByCo: bool = None,
+        NoCharge: bool = False,
+        PaidByCo: bool = False,
         Nt: str = None,
         CostIN: str = None,
         CostPayable: str = None,
         CostBill: str = None,
-        IsUnit: bool = None,
+        IsUnit: bool = False,
         UnitPrice: str = None,
         UnitRate: str = None,
         Units: str = None,
         UOM: str = None,
         DueDate: str = None,
         RefNbr: str = None,
-        HasReceipt: bool = None,
-        IsApproved: bool = None,
+        HasReceipt: bool = False,
+        IsApproved: bool = False,
         ApprovalStatus: str = None,
         ApprovalStatusNm: str = None,
         InvoiceSid: str = None,
-        IsInvoiced: bool = None,
-        IsVendorExpense: bool = None,
+        IsInvoiced: bool = False,
+        IsVendorExpense: bool = False,
         ExpenseReceipt=None,
         **kwargs,
     ):
@@ -520,6 +779,14 @@ class Expense(Base):
 
 
 class ExpenseReport(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         SID: str = None,
@@ -539,23 +806,55 @@ class ExpenseReport(Base):
 
 
 class PicklistIdName(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(self, Id: str = None, Name: str = None, **kwargs):
         self.id = Id
         self.name = Name
 
 
 class PicklistProject(PicklistIdName):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(self, Id: str = None, Name: str = None, Group: str = None, **kwargs):
         super().__init__(Id, Name, **kwargs)
         self.group = Group
 
 
 class PicklistClient(PicklistIdName):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(self, Id: str = None, Name: str = None, **kwargs):
         super().__init__(Id, Name, **kwargs)
 
 
 class PicklistStaff(PicklistIdName):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self, Id: str = None, Name: str = None, IsInactive: bool = False, **kwargs
     ):
@@ -564,6 +863,14 @@ class PicklistStaff(PicklistIdName):
 
 
 class Time(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         SID: str = None,
@@ -613,6 +920,14 @@ class Time(Base):
 
 
 class Timesheet(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(
         self,
         start_date: str = None,
@@ -640,12 +955,28 @@ class Timesheet(Base):
 
 
 class ProjectTimesheet(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(self, projectSID: str = None, timesheet: Timesheet = None, **kwargs):
         self.timesheet = timesheet
         self.project_id = projectSID
 
 
 class StaffTimesheet(Base):
+    """Holds the result of a REST request.
+
+    Attributes:
+        status_code: the HTTP status code of the request
+        message: the message of the request
+        data: the data sent with the request
+    """
+
     def __init__(self, staffSID: str = None, timesheet: Timesheet = None, **kwargs):
         self.timesheet = timesheet
         self.staff_id = staffSID

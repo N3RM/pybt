@@ -1,6 +1,10 @@
 import calendar
+import typing
 from datetime import date
 from enum import Enum, EnumMeta
+
+if typing.TYPE_CHECKING:
+    from pybt.api_wrapper.bigtime_api import BigTimeAPI
 
 
 def get_month_start_date(month: int, year: int) -> date:
@@ -39,6 +43,18 @@ def get_last_month_end_date() -> date:
         year -= 1
 
     return get_month_end_date(month=last_month, year=year)
+
+
+def get_project_last_invoice_date(bigtime_api: "BigTimeAPI", project_id: str):
+    project_invoice_list = bigtime_api.get_project_invoices(project_id=project_id)
+    if not project_invoice_list:
+        return None
+    latest_date = date(2000, 1, 1)
+    for invoice in project_invoice_list:
+        if invoice.invoice_date > latest_date:
+            latest_date = invoice.invoice_date
+
+    return latest_date
 
 
 def format_bigtime_date(dt: date) -> str:
